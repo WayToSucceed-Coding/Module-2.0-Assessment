@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python Learning Assessment</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <!-- jsPDF library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- jsPDF AutoTable plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="./styles.css" />
+
+    <!-- CodeMirror (lightweight, CDN) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/codemirror.min.css"
+      referrerpolicy="no-referrer"
+    />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/codemirror.min.js"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/mode/python/python.min.js"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/addon/edit/closebrackets.js"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/addon/edit/closetags.js"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/addon/edit/matchbrackets.js"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/addon/edit/closebrackets.js"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/addon/selection/active-line.js"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/addon/edit/closebrackets.min.js"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/addon/edit/matchbrackets.min.js"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/addon/fold/foldcode.min.js"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/addon/fold/foldgutter.min.js"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/addon/fold/brace-fold.min.js"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.17/addon/fold/indent-fold.min.js"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/codemirror.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/theme/monokai.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css"
+    />
+
+    <!-- Pyodide (Python in the browser) -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+    <!-- Chart.js for polished charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <!-- EmailJS SDK -->
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
+    ></script>
+  </head>
+
+  <body>
+    <!-- Watermark overlay -->
+    <div class="watermark-overlay"></div>
+
+    <header class="navbar">
+      <img src="./assets/company_logo.png" alt="Header" class="header-image" />
+    </header>
+
+    <div class="main-container">
+      <div class="panel" id="welcomePane">
+        <div id="welcomeView">
+          <h1>
+            <img
+              src="./assets/python-logo.png"
+              alt="Python Logo"
+              class="logo"
+            />
+            Python Assessment
+            <img src="assets/python-logo.png" alt="Python Logo" class="logo" />
+          </h1>
+          <div class="muted" id="moduleInfo">Loading modules…</div>
+          <p>
+            Test your Python programming knowledge across multiple topics. Click
+            "Let's Begin" to start your assessment.
+          </p>
+          <div class="start-button-container">
+            <button id="letsBeginBtn" class="primary">Let's Begin!</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Topic Selection View (hidden initially) -->
+      <div class="panel" id="topicSelectionPane" style="display: none">
+        <div id="topicSelectionView">
+          <h1>Choose Your Topic</h1>
+          <p class="muted" style="text-align: center; margin-bottom: 40px">
+            Click on any topic to begin your assessment
+          </p>
+          <div id="topicSelectionGrid"></div>
+          <div style="margin-top: 20px; text-align: center">
+            <button
+              id="showOverallResultsBtnTop"
+              class="btn btn-success"
+              style="display: none"
+            >
+              Show Overall Results
+            </button>
+          </div>
+        </div>
+      </div>
+
+    
+      <div id="assessmentArea" style="display: none">
+        <!--Left Pane-->
+        <div>
+          <h1>
+            <img
+              src="./assets/python-logo.png"
+              alt="Python Logo"
+              class="logo"
+            />
+            Python Assessment
+            <img src="assets/python-logo.png" alt="Python Logo" class="logo" />
+          </h1>
+          <div id="leftPaneContent">
+            <p id="currentTopicTitle">Topic: <span>Python Basics</span></p>
+            <div class="spacer"></div>
+            <h2>Questions</h2>
+            <div id="questionNav" class="row"></div>
+            <div class="leftPaneBtns">
+              <button id="backBtn" class="btn btn-primary">
+                <span>←</span>
+                Back To Topics
+              </button>
+              <button id="finishBtn" class="btn btn-green">
+                <span>🏁</span>
+                Finish
+              </button>
+            </div>
+          </div>
+        </div>
+        <!--Right Pane-->
+        <div id="rightPane">
+          <div id="questionContainer" style="display: none">
+            <h2 id="questionHeader">
+              Question <span id="questionNumber"></span>
+            </h2>
+            <div id="mcqView" style="display: none">
+              <div
+                id="mcqQuestion"
+                style="font-weight: 700; margin-bottom: 6px"
+              ></div>
+              <div id="mcqOptions" class="options"></div>
+              <div
+                id="mcqExplanation"
+                class="explanation muted"
+                style="margin-top: 8px"
+              ></div>
+              <div class="spacer"></div>
+              <div class="actions">
+                <button id="mcqSubmitBtn" class="primary">
+                  <span>📤</span>
+                  Submit
+                </button>
+              </div>
+            </div>
+
+            <div id="codeView" style="display: none">
+              <div class="task-description">
+                <h3 id="taskTitle"></h3>
+                <p id="taskDescription"></p>
+              </div>
+
+              <div class="editor-shell">
+                <div class="editor-header">
+                  <div class="editor-title">Python Editor</div>
+                  <div class="editor-controls">
+                    <button id="runBtn" class="btn btn-secondary">
+                      <span>▶️</span>
+                      Run Code
+                    </button>
+                    <button id="submitBtn" class="btn btn-primary">
+                      <span>📤</span>
+                      Submit
+                    </button>
+                  </div>
+                </div>
+                <textarea id="editor"></textarea>
+              </div>
+
+              <div class="code-output" id="codeFeedback" style="display: none">
+                <pre id="codeFeedbackText">
+Click "Run Code" to test your solution or "Submit" to finalize your answer.</pre
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Topic Report View -->
+      <div id="topicReportView" class="report-view panel" style="display: none">
+        <h2 id="topicReportHeader">Topic Report</h2>
+        <div id="topicReportContent"></div>
+        <div class="action-buttons">
+          <button id="continueToNextTopicBtn" class="btn btn-primary">
+            Continue to Next Topic
+          </button>
+          <button id="backToTopicsBtn" class="btn btn-primary">
+            <span>←</span>
+            Back to Topics
+          </button>
+          <button
+            id="showOverallResultsBtn"
+            class="btn btn-success"
+            style="display: none"
+          >
+            Show Overall Results
+          </button>
+        </div>
+      </div>
+
+      <!-- Overall Results View -->
+      <div
+        id="overallResultsView"
+        class="report-view panel"
+        style="display: none"
+      >
+        <div
+          style="
+            margin-top: 16px;
+            display: flex;
+            gap: 8px;
+            justify-content: space-between;
+          "
+        >
+          <div class="overall-header">
+            <div>
+              <h1 style="margin: 0; text-align: center; font-size: 35px">
+                Overall Results
+              </h1>
+              <div
+                id="overallSubheading"
+                class="muted"
+                style="font-size: 14px; margin-top: 4px"
+              ></div>
+            </div>
+            <div class="overall-meta" id="overallMeta"></div>
+          </div>
+          <div>
+            <button id="downloadPdfBtn" class="btn btn-secondary no-print">
+              <span id="btnText">Download PDF</span>
+              <span>📄</span>
+            </button>
+            <!-- <button id="emailTeacherBtn" class="btn btn-secondary">Email to Teacher</button> -->
+            <!-- <button id="backFromOverallBtn" class="btn btn-primary">
+              Back to Topics
+            </button> -->
+          </div>
+        </div>
+
+        <div class="overall-grid">
+          <div class="overall-card">
+            <div class="metric-label">Total Topics</div>
+            <div class="metric-value" id="metricTopics">0</div>
+          </div>
+          <div class="overall-card">
+            <div class="metric-label">Total Questions</div>
+            <div class="metric-value" id="metricQuestions">0</div>
+          </div>
+          <div class="overall-card">
+            <div class="metric-label">Correct</div>
+            <div class="metric-value ok" id="metricCorrect">0</div>
+          </div>
+          <div class="overall-card">
+            <div class="metric-label">Score</div>
+            <div class="metric-value accent" id="metricScore">0%</div>
+          </div>
+        </div>
+
+        <div class="overall-content">
+          <h2
+            style="
+              font-size: 35px;
+              max-width: 100%;
+              background-color: rgba(255, 169, 83, 0.953);
+              width: 100vw;
+              text-align: center;
+            "
+          >
+            Performance Analysis
+          </h2>
+          <div class="overall-chart">
+            <canvas id="overallChart" width="800" height="300"></canvas>
+          </div>
+          <h2
+            style="
+              font-size: 35px;
+              max-width: 100%;
+              background-color: rgba(255, 169, 83, 0.953);
+              width: 100vw;
+              text-align: center;
+            "
+          >
+            Detailed Analysis
+          </h2>
+          <div class="overall-table-wrapper">
+            <table class="overall-table" id="overallTable">
+              <thead>
+                <tr>
+                  <th>Topic</th>
+                  <th>Correct</th>
+                  <th>Total</th>
+                  <th>Score</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <h2
+            style="
+              font-size: 35px;
+              max-width: 100%;
+              background-color: rgba(255, 169, 83, 0.953);
+              width: 100vw;
+              text-align: center;
+            "
+          >
+            Review Answers
+          </h2>
+          <div id="reviewAnswers" class="review-answers"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
