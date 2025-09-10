@@ -6,17 +6,6 @@
             "description": "Covers functions, parameters, arguments, default arguments, positional and keyword arguments, variable scope (local, global, nonlocal), lambda functions, and advanced functions like map(), filter(), and zip().",
             "mcqs": [
                 {
-                    "question": "What will the following code print?\n\ndef greet(name='Student'):\n    print('Hello', name)\n\ngreet()",
-                    "options": [
-                        "Hello",
-                        "Hello Student",
-                        "Error: missing argument",
-                        "Hello name"
-                    ],
-                    "answer": 1,
-                    "explanation": "Since no argument is passed, the default value 'Student' is used."
-                },
-                {
                     "question": "Which of the following calls will cause an error?\n\ndef student_info(name, grade, roll_no):\n    print(name, grade, roll_no)",
                     "options": [
                         "student_info('Ravi', 7, 12)",
@@ -28,53 +17,31 @@
                     "explanation": "The last call provides only two arguments instead of three required positional arguments."
                 },
                 {
-                    "question": "What does the nonlocal keyword do?",
+                    "question": "In Python, what do local, nonlocal, and global variables refer to?",
                     "options": [
-                        "Makes a variable global",
-                        "Refers to a variable in the enclosing function's scope",
-                        "Declares a local variable",
-                        "Deletes a variable"
+                        "local variables are available everywhere, nonlocal variables are inside a function, and global variables are temporary",
+                        "local and nonlocal variables mean the same thing, while global variables are permanent",
+                        "local variables are inside a function, nonlocal variables are in an enclosing function, and global variables are defined outside all functions",
+                        "local variables are outside all functions, nonlocal variables are inside a function, and global variables are deleted after use"
                     ],
-                    "answer": 1,
-                    "explanation": "Nonlocal allows inner functions to modify variables in their enclosing function without making them global."
+                    "answer": 2,
+                    "explanation": "local variables exist only inside the function where they are created, nonlocal variables are used in nested functions referring to the nearest enclosing scope, and global variables are defined outside functions and accessible throughout the program."
                 },
                 {
-                    "question": "What is the output of the following code?\n\nnumbers = [1, 2, 3, 4]\nresult = list(map(lambda x: x * 2, numbers))\nprint(result)",
+                    "question": "In Python, what do the functions map(), filter(), and zip() do?",
                     "options": [
-                        "[1, 2, 3, 4]",
-                        "[2, 4, 6, 8]",
-                        "[1, 4, 9, 16]",
-                        "Error"
-                    ],
-                    "answer": 1,
-                    "explanation": "The map function applies the lambda function to each element, doubling them."
-                },
-                {
-                    "question": "What does the following filter code return?\n\nnumbers = [10, 25, 30, 15]\nresult = list(filter(lambda x: x > 20, numbers))\nprint(result)",
-                    "options": [
-                        "[10, 25, 30, 15]",
-                        "[25, 30]",
-                        "[10, 15]",
-                        "[25, 30, 15]"
-                    ],
-                    "answer": 1,
-                    "explanation": "The filter function returns only elements greater than 20."
-                },
-                {
-                    "question": "What will be the result of this code?\n\nlist(zip([1, 2, 3], ['a', 'b', 'c']))",
-                    "options": [
-                        "[(1, 'a'), (2, 'b'), (3, 'c')]",
-                        "[(1, 'b'), (2, 'c'), (3, 'a')]",
-                        "[1, 'a', 2, 'b', 3, 'c']",
-                        "Error"
+                        "map() applies a function to each item, filter() keeps items that meet a condition, and zip() pairs elements from multiple lists",
+                        "map() filters items, filter() applies a function, and zip() sorts lists",
+                        "map() joins lists, filter() removes duplicates, and zip() reverses lists",
+                        "map(), filter(), and zip() all return errors if used together"
                     ],
                     "answer": 0,
-                    "explanation": "The zip function pairs elements by position into tuples."
+                    "explanation": "map() transforms each element with a function, filter() selects elements that satisfy a condition, and zip() combines elements by position into tuples."
                 }
             ],
             "codeTasks": [
                 {
-                    "question": "You need to create a system that applies a bonus to multiple student marks.\n\nSteps:\n1. Create a global variable `bonus` and assign it the value 5.\n2. Define a function `process_marks(*args)` that accepts any number of student marks.\n3. Inside `process_marks`, create a variable `total_bonus` initialized to 0 to track the cumulative bonus.\n4. Define a nested function `apply_bonus(mark)`:\n   a. Declare `total_bonus` as nonlocal.\n   b. Increment `total_bonus` by the global `bonus`.\n   c. Return the sum of `mark` and the global `bonus`.\n5. After defining `apply_bonus`, use the `map()` function to apply it to each mark passed to `process_marks`. Convert the result to a list called `new_marks`.\n6. Return `new_marks` from `process_marks`.\n\nExample: Calling `process_marks(70, 80, 90)` should return `[75, 85, 95]`.",
+                    "question": "You need to create a system that applies a bonus to multiple student marks.\n\nSteps:\n1. Create a global variable named `bonus` and assign it the value 5.\n2. Define a function called `process_marks` that takes any number of arguments (`*args`).\n3. Inside `process_marks`, create a variable named `total_bonus` and set it equal to 0.\n4. Still inside `process_marks`, define a nested function called `apply_bonus` that takes one parameter `mark`.\n5. Inside `apply_bonus`, declare `total_bonus` as nonlocal so it can be modified.\n6. Inside `apply_bonus`, increase `total_bonus` by the value of the global variable `bonus`.\n7. Inside `apply_bonus`, return the sum of `mark` and the global variable `bonus`.\n8. After defining `apply_bonus` but inside `process_marks`, call the `map()` function with `apply_bonus` as the first argument and the list of marks (`args`) as the second argument. Store the result in a variable named `new_marks` after converting it into a list.\n9. Return `new_marks` from `process_marks`.\n\nExample: Calling `process_marks(70, 80, 90)` should return `[75, 85, 95]`.",
                     "starterCode": "# Your code here",
                     "expectedOutput": "[75, 85, 95]",
                     "solutionCode": "bonus = 5\n\ndef process_marks(*args):\n    total_bonus = 0\n    def apply_bonus(mark):\n        nonlocal total_bonus\n        total_bonus += bonus\n        return mark + bonus\n    new_marks = list(map(apply_bonus, args))\n    return new_marks",
@@ -216,462 +183,141 @@
             ]
         },
         {
-            "name": "Classes and Objects",
-            "description": "Covers classes, objects, attributes, methods, __init__() method, self parameter, and how to create and use objects in Python.",
+            "name": "Object-Oriented Programming",
+            "description": "",
             "mcqs": [
                 {
                     "question": "Which of the following best describes a class in Python?",
                     "options": [
-                        "A template that defines properties and behaviors",
-                        "A specific object created from a template",
+                        "A variable storing data",
                         "A function inside an object",
-                        "A variable storing data"
+                        "A specific object created from a template",
+                        "A template that defines properties and behaviors"
                     ],
-                    "answer": 0,
+                    "answer": 3,
                     "explanation": "A class acts as a template that defines the common attributes and methods for all objects created from it."
                 },
                 {
                     "question": "What is an object in Python?",
                     "options": [
-                        "A template for creating classes",
-                        "An instance of a class",
+                        "A variable storing a method",
                         "A function inside a class",
-                        "A variable storing a method"
+                        "An instance of a class",
+                        "A template for creating classes"
                     ],
-                    "answer": 1,
+                    "answer": 2,
                     "explanation": "An object is an instance of a class with its own set of attribute values."
                 },
                 {
                     "question": "What is the purpose of the __init__() method in a class?",
                     "options": [
                         "It deletes an object when it is no longer needed",
-                        "It initializes object attributes when the object is created",
                         "It defines a class-level variable",
+                        "It initializes object attributes when the object is created",
                         "It converts a class into a function"
                     ],
-                    "answer": 1,
+                    "answer": 2,
                     "explanation": "__init__() is called automatically when an object is created, allowing initialization of the object's attributes."
                 },
                 {
                     "question": "In a class method, what does the self parameter represent?",
                     "options": [
-                        "The class itself",
+                        "A local function inside the class",
                         "The current object that calls the method",
                         "A global variable",
-                        "A local function inside the class"
+                        "The class itself"
                     ],
                     "answer": 1,
                     "explanation": "self represents the specific object calling the method, allowing access to its attributes and other methods."
-                }
-            ],
-            "codeTasks": [
+                },
                 {
-                    "question": "You need to create a Book class and create objects with customized attributes.\n\nSteps:\n1. Define a class called Book.\n2. Inside the class, define an __init__() method with parameters: self, title, author, pages.\n3. Inside __init__(), assign the parameters to the object's attributes (self.title = title, etc.).\n4. Add a method called read_book(self) that prints 'Reading <title> by <author>'.\n5. Create two objects of Book with different values for title, author, and pages.\n6. Call the read_book() method on both objects to see the output.",
-                    "starterCode": "# Step 1: Define the Book class\n# Step 2: Define __init__() with parameters\n# Step 3: Assign attributes inside __init__\n# Step 4: Define read_book() method\n# Step 5: Create two Book objects\n# Step 6: Call read_book() method on each object",
-                    "expectedOutput": "Reading 1984 by George Orwell\nReading To Kill a Mockingbird by Harper Lee",
-                    "solutionCode": "class Book:\n    def __init__(self, title, author, pages):\n        self.title = title\n        self.author = author\n        self.pages = pages\n\n    def read_book(self):\n        print(f'Reading {self.title} by {self.author}')\n\nbook1 = Book('1984', 'George Orwell', 328)\nbook2 = Book('To Kill a Mockingbird', 'Harper Lee', 281)\n\nbook1.read_book()\nbook2.read_book()",
-                    "testCases": [
-                        {
-                            "mode": "function",
-                            "call": {
-                                "name": "book1.read_book",
-                                "args": []
-                            },
-                            "expectedReturn": "Reading 1984 by George Orwell"
-                        },
-                        {
-                            "mode": "function",
-                            "call": {
-                                "name": "book2.read_book",
-                                "args": []
-                            },
-                            "expectedReturn": "Reading To Kill a Mockingbird by Harper Lee"
-                        }
-                    ],
-                    "structureRequirements": {
-                        "functions": [
-                            "read_book"
-                        ],
-                        "mustUseForLoop": false,
-                        "mustUseWhileLoop": false,
-                        "forbidden": [
-                            "eval(",
-                            "exec("
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "name": "Polymorphism",
-            "description": "Covers polymorphism in Python, including operators, built-in functions, and method overriding in classes.",
-            "mcqs": [
-                {
-                    "question": "What does polymorphism mean in programming?",
+                    "question": "What does polymorphism mean in Python?",
                     "options": [
-                        "A single object type has only one form",
-                        "Operators, functions, and methods can behave differently depending on the object type",
+                        "Restricting functions to only one type of input",
                         "Creating multiple copies of an object",
-                        "Restricting functions to only one type of input"
+                        "A single object type has only one form",
+                        "When a function or operator behaves differently depending on the type of object"
                     ],
-                    "answer": 1,
-                    "explanation": "Polymorphism allows operators (like +, *), built-in functions (like len()), and methods to behave differently depending on the type of object they are applied to. For example, + adds numbers, concatenates strings, and merges lists; len() returns the length of strings, lists, or dictionaries; and a method like generate() can behave differently in different classes."
+                    "answer": 3,
+                    "explanation": "Polymorphism in Python allows functions and operators to behave differently depending on the object type. For example, + adds numbers but concatenates strings, and len() works on strings, lists, and dictionaries."
                 },
-                {
-                    "question": "Which of the following demonstrates polymorphism in Python, where the same operation behaves differently depending on the type of object?",
-                    "options": [
-                        "Using len() on a list, string, and dictionary, and using + with numbers and strings",
-                        "Defining two classes with the same method name performing different tasks",
-                        "Calling a function with the same argument type multiple times",
-                        "Creating multiple objects of the same class"
-                    ],
-                    "answer": 0,
-                    "explanation": "Polymorphism allows the same operation to behave differently based on the object type. For example, len() returns the number of elements for a list, the number of characters for a string, and the number of key-value pairs for a dictionary. Similarly, + adds numbers but concatenates strings. This is a clear example of polymorphism in Python using both functions and operators."
-                },
-                {
-                    "question": "Which of the following demonstrates polymorphism in OOP?",
-                    "options": [
-                        "A method with the same name performing differently in two classes",
-                        "A class having only one method",
-                        "Using only numbers with operators",
-                        "Creating objects without methods"
-                    ],
-                    "answer": 0,
-                    "explanation": "Polymorphism in OOP allows a method with the same name to behave differently depending on the class it belongs to."
-                }
-            ],
-            "codeTasks": [
-                {
-                    "question": "Write a program that demonstrates polymorphism using the + operator with different data types. Create the following variables and use the + operator, then print each result:\n\n1. num1 = 10, num2 = 5 (addition)\n2. word1 = 'Hello', word2 = 'World' (concatenation)\n3. list1 = [1, 2], list2 = [3, 4] (merging lists)\n\nShow how the same + operator behaves differently with numbers, strings, and lists.",
-                    "starterCode": "# Demonstrate + operator polymorphism\n# Your code here",
-                    "expectedOutput": "15\nHelloWorld\n[1, 2, 3, 4]",
-                    "solutionCode": "num1 = 10\nnum2 = 5\nword1 = 'Hello'\nword2 = 'World'\nlist1 = [1, 2]\nlist2 = [3, 4]\n\nprint(num1 + num2)\nprint(word1 + word2)\nprint(list1 + list2)",
-                    "testCases": [
-                        {
-                            "mode": "io",
-                            "input": [],
-                            "expected": "15\nHelloWorld\n[1, 2, 3, 4]"
-                        }
-                    ],
-                    "structureRequirements": {
-                        "functions": [],
-                        "mustUseForLoop": false,
-                        "mustUseWhileLoop": false,
-                        "forbidden": [
-                            "eval(",
-                            "exec("
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "name": "Inheritance",
-            "mcqs": [
                 {
                     "question": "What does inheritance in Python allow you to do?",
                     "options": [
-                        "Create multiple copies of the same object",
-                        "Allow a child class to reuse attributes and methods from a parent class",
                         "Restrict a class to use only one attribute",
-                        "Prevent method overriding"
+                        "Create multiple copies of the same object",
+                        "Prevent method overriding",
+                        "Allow a child class to reuse attributes and methods from a parent class"
                     ],
-                    "answer": 1,
+                    "answer": 3,
                     "explanation": "Inheritance allows a child class to reuse attributes and methods from a parent class, avoiding code duplication."
                 },
                 {
-                    "question": "What happens if a child class defines its own __init__() method without calling the parent’s __init__()?",
-                    "options": [
-                        "It keeps all parent attributes automatically",
-                        "It loses the parent’s attributes unless they are explicitly called",
-                        "It cannot define its own attributes",
-                        "It throws an error"
-                    ],
-                    "answer": 1,
-                    "explanation": "When the child’s __init__() overrides the parent’s __init__() without calling it, the parent’s attributes are not inherited."
-                },
-                {
-                    "question": "Which function is used to call the parent’s __init__() method without explicitly naming the parent class?",
-                    "options": [
-                        "self()",
-                        "parent()",
-                        "base()",
-                        "super()"
-                    ],
-                    "answer": 3,
-                    "explanation": "The super() function lets you call the parent class’s __init__() method (and other methods) without explicitly mentioning the parent class’s name."
-                },
-                {
-                    "question": "If a child class has a method with the same name as in the parent class, what happens?",
-                    "options": [
-                        "The parent’s method is automatically removed",
-                        "Both methods run one after another",
-                        "The parent’s method is overridden by the child’s method",
-                        "Python throws an error"
-                    ],
-                    "answer": 2,
-                    "explanation": "When a child method has the same name as a parent method, the parent’s version is overridden."
-                },
-                {
-                    "question": "What does isinstance(obj, ClassName) return?",
-                    "options": [
-                        "The class name of the object",
-                        "True if obj is an instance of ClassName, otherwise False",
-                        "The parent class of obj",
-                        "The attributes of the object"
-                    ],
-                    "answer": 1,
-                    "explanation": "isinstance() checks if an object is an instance of a particular class and returns True or False."
-                }
-            ],
-            "codeTasks": [
-                {
-                    "question": "Complete the code to demonstrate inheritance and overriding with super().\n\nSteps:\n1. Create a parent class Person with a method introduce() that prints 'I am a person'.\n2. Create a child class Student that overrides introduce().\n3. Inside Student's introduce(), first call the parent's introduce() using super(), then print 'I am also a student'.\n4. Create a Student object and call introduce().",
-                    "starterCode": "class Person:\n    def introduce(self):     \n       pass\n",
-                    "solutionCode": "class Person:\n    def introduce(self):\n        print('I am a person')\n\nclass Student(Person):\n    def introduce(self):\n        super().introduce()\n        print('I am also a student')\n\nstudent1 = Student()\nstudent1.introduce()",
-                    "expectedOutput": "I am a person\nI am also a student",
-                    "testCases": [
-                        {
-                            "mode": "function",
-                            "call": {
-                                "name": "Student",
-                                "args": []
-                            },
-                            "expectedReturn": null
-                        }
-                    ],
-                    "structureRequirements": {
-                        "classes": [
-                            "Person",
-                            "Student"
-                        ],
-                        "functions": [
-                            "introduce"
-                        ],
-                        "mustUseForLoop": false,
-                        "mustUseWhileLoop": false,
-                        "forbidden": [
-                            "eval(",
-                            "exec("
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            "name": "Encapsulation",
-            "description": "Students will learn how encapsulation bundles data and methods into a single unit (class), protecting sensitive information and restricting access using public and private members.",
-            "mcqs": [
-                {
                     "question": "What is encapsulation in object-oriented programming?",
                     "options": [
-                        "Grouping unrelated classes together",
                         "Bundling data and methods into a single unit and restricting access from outside",
-                        "Writing all functions in a single file",
-                        "Separating the code into multiple modules"
+                        "Grouping unrelated classes together",
+                        "Separating the code into multiple modules",
+                        "Writing all functions in a single file"
                     ],
-                    "answer": 1,
+                    "answer": 0,
                     "explanation": "Encapsulation involves combining data (attributes) and methods into a class and controlling access to protect sensitive information."
-                },
-                {
-                    "question": "Why is encapsulation important?",
-                    "options": [
-                        "It allows the code to run faster",
-                        "It protects sensitive data, prevents accidental modification, and keeps code organized",
-                        "It ensures inheritance works properly",
-                        "It eliminates the need for methods"
-                    ],
-                    "answer": 1,
-                    "explanation": "Encapsulation provides data protection, avoids misuse, and organizes related data and methods together."
-                },
-                {
-                    "question": "In the ATM analogy, which attribute should be public?",
-                    "options": [
-                        "The actual PIN stored in the bank",
-                        "The entered PIN input by the user",
-                        "The verify() method",
-                        "The internal cash counter"
-                    ],
-                    "answer": 1,
-                    "explanation": "The entered PIN is public because the user needs to access and modify it using the keypad."
                 },
                 {
                     "question": "How do you define a private attribute in Python?",
                     "options": [
-                        "Add a single underscore before its name",
+                        "Use the protected keyword",
                         "Add two underscores before its name",
                         "Use the private keyword",
-                        "Use the protected keyword"
+                        "Add a single underscore before its name"
                     ],
                     "answer": 1,
                     "explanation": "Private attributes in Python are defined by prefixing the name with two underscores (e.g., __actual_pin)."
                 },
                 {
-                    "question": "What happens if you try to access a private attribute outside the class?",
-                    "options": [
-                        "It prints the value normally",
-                        "It raises an AttributeError",
-                        "It automatically converts it to a public attribute",
-                        "Python ignores the private keyword"
-                    ],
-                    "answer": 1,
-                    "explanation": "Private attributes cannot be accessed outside the class; attempting to do so raises an AttributeError."
-                },
-                {
-                    "question": "Which of the following is true about public methods?",
-                    "options": [
-                        "They can only be used inside the class",
-                        "They can be accessed both inside and outside the class",
-                        "They cannot access private attributes",
-                        "They are automatically abstract"
-                    ],
-                    "answer": 1,
-                    "explanation": "Public methods can be accessed and called both inside and outside the class."
-                },
-                {
-                    "question": "How do you make a method private in Python?",
-                    "options": [
-                        "Add two underscores before its name",
-                        "Add a single underscore before its name",
-                        "Use the private keyword",
-                        "Use the static keyword"
-                    ],
-                    "answer": 0,
-                    "explanation": "A method is made private by adding two underscores before its name (e.g., __verify())."
-                },
-                {
-                    "question": "In the ATM example, why is the verify() method made private?",
-                    "options": [
-                        "To allow users to change the actual PIN",
-                        "To restrict access to the internal mechanism of checking the PIN",
-                        "To speed up the program",
-                        "To make the PIN public"
-                    ],
-                    "answer": 1,
-                    "explanation": "The verify() method is private to prevent users from accessing or modifying the internal PIN-checking logic."
-                },
-                {
-                    "question": "What is the purpose of the check() method in the ATM class?",
-                    "options": [
-                        "To act as the public interface that calls the private verify() method",
-                        "To store the actual PIN",
-                        "To allow users to modify the bank database",
-                        "To generate a random PIN"
-                    ],
-                    "answer": 0,
-                    "explanation": "The check() method is public and acts as an interface, calling the private verify() method internally."
-                },
-                {
-                    "question": "Which of the following is a key advantage of using private members?",
-                    "options": [
-                        "They allow accidental modification of sensitive data",
-                        "They protect data from outside interference and misuse",
-                        "They make code run slower",
-                        "They prevent the use of public methods"
-                    ],
-                    "answer": 1,
-                    "explanation": "Private members safeguard sensitive information and prevent accidental or unauthorized changes."
-                }
-            ]
-        },
-        {
-            "name": "Abstraction",
-            "description": "In this topic, students will learn about abstraction in Python, which allows defining rules in a base class that all child classes must follow. They will explore creating abstract classes and methods using the abc module, and implement child classes that provide specific behavior.",
-            "mcqs": [
-                {
                     "question": "What is an abstract class in Python?",
                     "options": [
+                        "A class that can only inherit from other classes",
                         "A class that can be instantiated directly",
                         "A class that defines rules (methods) for child classes",
-                        "A class with only concrete methods",
-                        "A class that can only inherit from other classes"
-                    ],
-                    "answer": 1,
-                    "explanation": "An abstract class defines a set of methods that child classes must implement and cannot be instantiated if it has abstract methods."
-                },
-                {
-                    "question": "Which module provides tools to create abstract classes and methods in Python?",
-                    "options": [
-                        "random",
-                        "abc",
-                        "sys",
-                        "time"
-                    ],
-                    "answer": 1,
-                    "explanation": "The abc module (Abstract Base Class) allows creation of abstract classes and abstract methods."
-                },
-                {
-                    "question": "What happens if a child class does not implement all abstract methods from the parent class?",
-                    "options": [
-                        "It will work normally",
-                        "Python will allow instantiation but give a warning",
-                        "You cannot create an object of that child class",
-                        "It converts abstract methods to concrete automatically"
+                        "A class with only concrete methods"
                     ],
                     "answer": 2,
-                    "explanation": "If a child class does not implement all abstract methods, Python will prevent instantiation of that class."
-                },
-                {
-                    "question": "What is the purpose of an abstract method?",
-                    "options": [
-                        "To provide full implementation that child classes can use",
-                        "To define a rule that child classes must follow without giving implementation",
-                        "To execute code faster",
-                        "To make a class private"
-                    ],
-                    "answer": 1,
-                    "explanation": "An abstract method has no implementation and requires each child class to provide its own version."
-                },
-                {
-                    "question": "Can you create an object of an abstract class with no abstract methods?",
-                    "options": [
-                        "Yes, if there are no abstract methods",
-                        "No, never",
-                        "Yes, only if it inherits another class",
-                        "No, only concrete classes can be instantiated"
-                    ],
-                    "answer": 0,
-                    "explanation": "If an abstract class has no abstract methods, it can be instantiated like a normal class."
+                    "explanation": "An abstract class defines a set of methods that child classes must implement and cannot be instantiated if it has abstract methods."
                 }
             ],
             "codeTasks": [
                 {
-                    "question": "Create an abstract Payment system using the abc module.\n\nSteps to follow:\n1. Import ABC and abstractmethod from the abc module.\n2. Create an abstract class Payment that has:\n   - A concrete method payment_info() that prints 'This is a payment system for processing transactions.'\n   - An abstract method make_payment(amount) with no implementation.\n3. Create a child class CreditCardPayment that inherits from Payment and implements:\n   - make_payment(amount) that prints '<amount> paid using Credit Card'\n   - card_details() that prints the last four digits of the card.\n4. Create a child class PayPalPayment that inherits from Payment and implements:\n   - make_payment(amount) that prints '<amount> paid using PayPal'\n   - account_email() that prints the email of the PayPal account.\n5. Create objects of both child classes and call all their methods.",
-                    "starterCode": "from abc import ABC, abstractmethod\n\n# Step 2: Create abstract class Payment\nclass Payment(ABC):\n    # concrete method\n    def payment_info(self):\n        # your code here\n        pass\n\n    # abstract method\n    @abstractmethod\n    def make_payment(self, amount):\n        pass\n\n# Step 3: Create CreditCardPayment class inheriting Payment\nclass CreditCardPayment(Payment):\n    # implement make_payment\n    # add card_details method\n    pass\n\n# Step 4: Create PayPalPayment class inheriting Payment\nclass PayPalPayment(Payment):\n    # implement make_payment\n    # add account_email method\n    pass\n\n# Step 5: Create objects and call methods\n# your code here",
-                    "solutionCode": "from abc import ABC, abstractmethod\n\nclass Payment(ABC):\n    def payment_info(self):\n        print('This is a payment system for processing transactions.')\n\n    @abstractmethod\n    def make_payment(self, amount):\n        pass\n\nclass CreditCardPayment(Payment):\n    def make_payment(self, amount):\n        print(f'{amount} paid using Credit Card')\n\n    def card_details(self):\n        print('Card last 4 digits: 1234')\n\nclass PayPalPayment(Payment):\n    def make_payment(self, amount):\n        print(f'{amount} paid using PayPal')\n\n    def account_email(self):\n        print('paypal@example.com')\n\n# Objects\ncc_payment = CreditCardPayment()\npaypal_payment = PayPalPayment()\n\n# Method calls\ncc_payment.payment_info()\ncc_payment.card_details()\ncc_payment.make_payment(500)\npaypal_payment.payment_info()\npaypal_payment.account_email()\npaypal_payment.make_payment(750)",
-                    "expectedOutput": "This is a payment system for processing transactions.\nCard last 4 digits: 1234\n500 paid using Credit Card\nThis is a payment system for processing transactions.\npaypal@example.com\n750 paid using PayPal",
+                    "question": "You need to create a system to handle different types of vehicles.\n\nFollow these exact steps:\n\n1. Import ABC and abstractmethod from the abc module.\n   - Write: `from abc import ABC, abstractmethod`\n\n2. Create an abstract class called Vehicle that inherits from ABC.\n\n3. In the Vehicle class, define an __init__() method with parameters `self`, `brand`, and `speed`.\n   - Inside __init__(), assign `self.brand = brand`.\n   - Make `speed` a private attribute by assigning it to `self.__speed = speed`.\n\n4. Define a method `get_speed(self)` inside Vehicle that returns `self.__speed`.\n\n5. Inside Vehicle, define an abstract method `fuel_type(self)` using the @abstractmethod decorator.\n\n6. Create a subclass Car that inherits from Vehicle.\n   - Implement `fuel_type(self)` to return the string `'Petrol'`.\n\n7. Create a subclass ElectricScooter that inherits from Vehicle.\n   - Implement `fuel_type(self)` to return the string `'Electric'`.\n\n8. Define a function called `create_vehicles()`.\n   - Inside this function, create an object `car` of type Car with brand `'Tesla'` and speed `120`.\n   - Create an object `scooter` of type ElectricScooter with brand `'Yamaha'` and speed `45`.\n   - Return a **single string using an f-string** in this exact format:\n     `f\"{car.brand},{car.get_speed()},{car.fuel_type()},{scooter.brand},{scooter.get_speed()},{scooter.fuel_type()}\"`\n   - Do not hardcode values like `'Tesla'` or `'Yamaha'`; use the object attributes and methods.\n   - Do not use print statements.\n\n9. The function `create_vehicles()` should be the only output of your code.",
+                    "starterCode": "# Step 1: Import ABC and abstractmethod\n# Step 2: Define Vehicle class inheriting ABC\n# Step 3: Define __init__ with brand and speed (private)\n# Step 4: Define get_speed method\n# Step 5: Define abstract method fuel_type\n# Step 6: Define Car subclass and implement fuel_type\n# Step 7: Define ElectricScooter subclass and implement fuel_type\n# Step 8: Define create_vehicles() function and return the formatted string using object attributes and f-string",
+                    "expectedOutput": "Tesla,120,Petrol,Yamaha,45,Electric",
+                    "solutionCode": "from abc import ABC, abstractmethod\n\nclass Vehicle(ABC):\n    def __init__(self, brand, speed):\n        self.brand = brand\n        self.__speed = speed\n\n    def get_speed(self):\n        return self.__speed\n\n    @abstractmethod\n    def fuel_type(self):\n        pass\n\nclass Car(Vehicle):\n    def fuel_type(self):\n        return 'Petrol'\n\nclass ElectricScooter(Vehicle):\n    def fuel_type(self):\n        return 'Electric'\n\ndef create_vehicles():\n    car = Car('Tesla', 120)\n    scooter = ElectricScooter('Yamaha', 45)\n    return f\"{car.brand},{car.get_speed()},{car.fuel_type()},{scooter.brand},{scooter.get_speed()},{scooter.fuel_type()}\"",
                     "testCases": [
                         {
-                            "mode": "execution",
-                            "input": "",
-                            "expectedOutput": null
+                            "mode": "function",
+                            "call": {
+                                "name": "create_vehicles",
+                                "args": []
+                            },
+                            "expectedReturn": "Tesla,120,Petrol,Yamaha,45,Electric"
                         }
                     ],
                     "structureRequirements": {
-                        "classes": [
-                            "Payment",
-                            "CreditCardPayment",
-                            "PayPalPayment"
-                        ],
                         "functions": [
-                            "payment_info",
-                            "make_payment",
-                            "card_details",
-                            "account_email"
+                            "get_speed",
+                            "fuel_type",
+                            "create_vehicles"
                         ],
                         "mustUseForLoop": false,
                         "mustUseWhileLoop": false,
                         "forbidden": [
                             "eval(",
                             "exec("
-                        ],
-                        "modules": [
-                            "abc"
                         ]
                     }
                 }
             ]
-        },    
+        },
         {
             "name": "Modules and Packages",
             "description": "In this topic, students will learn how Python organizes code into modules and packages, and how built-in modules provide ready-made tools for common tasks. They will explore creating their own modules, grouping them into packages, and using built-in modules like random, time, datetime, and sys to write efficient programs.",
@@ -679,10 +325,10 @@
                 {
                     "question": "What is the main purpose of a Python module?",
                     "options": [
-                        "To execute code faster",
-                        "To reuse code by organizing it into a separate .py file",
                         "To connect Python with databases",
-                        "To automatically generate random numbers"
+                        "To reuse code by organizing it into a separate .py file",
+                        "To automatically generate random numbers",
+                        "To execute code faster"
                     ],
                     "answer": 1,
                     "explanation": "Modules allow us to organize and reuse code by storing it in separate .py files that can be imported into other programs."
@@ -690,70 +336,49 @@
                 {
                     "question": "Which file makes a folder behave like a package in Python?",
                     "options": [
-                        "package.py",
                         "setup.py",
+                        "main.py",
                         "__init__.py",
-                        "main.py"
+                        "package.py"
                     ],
                     "answer": 2,
                     "explanation": "The __init__.py file marks a folder as a Python package, allowing it to contain multiple modules."
                 },
                 {
-                    "question": "If you want to generate a random integer between 10 and 20, which function should you use?",
-                    "options": [
-                        "random.random(10,20)",
-                        "random.randint(10,20)",
-                        "random.uniform(10,20)",
-                        "random.choice(10,20)"
-                    ],
-                    "answer": 1,
-                    "explanation": "random.randint(10,20) generates a random integer between 10 and 20, both inclusive."
-                },
-                {
-                    "question": "Which of the following functions pauses a program for a few seconds?",
+                    "question": "Which function allows you to pause a Python program for a few seconds?",
                     "options": [
                         "time.sleep()",
-                        "time.pause()",
+                        "datetime.now()",
                         "sys.exit()",
-                        "datetime.now()"
+                        "time.pause()"
                     ],
                     "answer": 0,
                     "explanation": "time.sleep(n) pauses the program for n seconds."
                 },
                 {
-                    "question": "What will datetime.now() return?",
+                    "question": "Which function generates a random integer between 10 and 20, inclusive?",
                     "options": [
-                        "Only the current date",
-                        "Only the current time",
-                        "Both the current date and time",
-                        "The number of seconds since 1970"
-                    ],
-                    "answer": 2,
-                    "explanation": "datetime.now() returns a datetime object that contains both the current date and time."
-                },
-                {
-                    "question": "Which module would you use if you want to exit the program early?",
-                    "options": [
-                        "time",
-                        "sys",
-                        "random",
-                        "datetime"
+                        "random.choice(10,20)",
+                        "random.randint(10,20)",
+                        "random.random(10,20)",
+                        "random.uniform(10,20)"
                     ],
                     "answer": 1,
-                    "explanation": "The sys module provides sys.exit(), which allows you to exit a program early."
+                    "explanation": "random.randint(10,20) generates a random integer between 10 and 20, both inclusive."
                 }
             ],
             "codeTasks": [
                 {
-                    "question": "Write a program using the random and time modules that simulates a lucky draw.\n\nSteps to follow:\n1. Import the random and time modules.\n2. Create a list of at least 5 participant names.\n3. Print 'Starting the lucky draw...' and pause for 3 seconds using time.sleep().\n4. Use random.choice() to select one winner from the list.\n5. Print 'The winner is: <name>'.",
-                    "starterCode": "import random\nimport time\n\n# Step 2: Create a list of participants\nparticipants = [\"Alice\", \"Bob\", \"Charlie\", \"David\", \"Eve\"]\n\n# Step 3: Print starting message and pause\n# your code here\n\n# Step 4: Select a random winner\n# your code here\n\n# Step 5: Print winner\n# your code here",
+                    "question": "Write a program that simulates a lucky draw.\n\nFollow these steps carefully:\n\n1. Use the provided list of participants (do not modify this list):\n   `participants = [\"Alice\", \"Bob\", \"Charlie\", \"David\", \"Eve\"]`\n\n2. Import the required modules: `random` and `time`.\n\n3. Print the message 'Starting the lucky draw...' and pause the program for 3 seconds using `time.sleep()`.\n\n4. Randomly select one winner from the participants list using `random.choice()`.\n\n5. Print the winner in the format: 'The winner is: <name>', where `<name>` is the randomly selected participant.",
+                    "starterCode": "# Step 1: Import modules\n\nparticipants = [\"Alice\", \"Bob\", \"Charlie\", \"David\", \"Eve\"]\n\n# Step 2: Print starting message and pause\n\n# Step 3: Select a random winner\n\n# Step 4: Print the winner",
                     "solutionCode": "import random\nimport time\n\nparticipants = [\"Alice\", \"Bob\", \"Charlie\", \"David\", \"Eve\"]\n\nprint('Starting the lucky draw...')\ntime.sleep(3)\n\nwinner = random.choice(participants)\nprint('The winner is:', winner)",
-                    "expectedOutput": "Starting the lucky draw...\n(The program pauses for 3 seconds)\nThe winner is: Alice",
+                    "expectedOutput": "Starting the lucky draw...\n(The program pauses for 3 seconds)\nThe winner is: <name>",
                     "testCases": [
                         {
-                            "mode": "execution",
-                            "input": "",
-                            "expectedOutput": null
+                            "mode": "io",
+                            "input": [],
+                            "compare": "regex",
+                            "expectedRegex": "The winner is:\\s*(Alice|Bob|Charlie|David|Eve)"
                         }
                     ],
                     "structureRequirements": {
@@ -776,39 +401,27 @@
             "description": "Understanding the difference between syntax errors and exceptions. Using try, except, else, and finally to handle exceptions gracefully, and learning to raise exceptions manually.",
             "mcqs": [
                 {
-                    "question": "What is the main difference between a SyntaxError and a ZeroDivisionError?",
+                    "question": "In Python, what is the main purpose of a try-except block?",
                     "options": [
-                        "A SyntaxError happens while the code is running; a ZeroDivisionError happens before the code runs.",
-                        "A SyntaxError prevents the code from starting; a ZeroDivisionError happens after the code has started running.",
-                        "They are the same type of error, just with different names.",
-                        "A SyntaxError is caused by the user; a ZeroDivisionError is caused by the programmer."
+                        "The try block is for code that might raise exceptions; the except block handles the exceptions if they occur.",
+                        "The try block runs only if an exception occurs; the except block runs only if no exception occurs.",
+                        "The try block automatically fixes errors; the except block prints the error.",
+                        "The try block is optional; the except block is mandatory for all code."
                     ],
-                    "answer": 1,
-                    "explanation": "A SyntaxError is a mistake in the code's structure (like a missing parenthesis) that Python finds before it runs any code. A ZeroDivisionError is an exception that occurs during execution when the program tries to divide by zero.",
+                    "answer": 0,
+                    "explanation": "The try block contains code that might raise exceptions. The except block is executed only if an exception occurs in the try block, allowing the program to handle errors gracefully.",
                     "topic": "Errors vs. Exceptions and Basic Handling"
                 },
                 {
-                    "question": "Look at the following code:\n\ntry:\n    num = int(input('Enter a number: '))\n    result = 100 / num\n    print(f'Result is {result}')\nexcept ValueError:\n    print('Please enter a valid number!')\nexcept ZeroDivisionError:\n    print('You cannot divide by zero!')\n\nWhat will be the output if the user enters the word 'five'?",
+                    "question": "Which keyword is used to define a block of code that will run only if no exception occurs in the try block, and which keyword defines a block that always runs regardless of exceptions?",
                     "options": [
-                        "'Result is 20.0'",
-                        "'Please enter a valid number!'",
-                        "'You cannot divide by zero!'",
-                        "The program will crash with a red error message."
+                        "'else' runs if an exception occurs; 'finally' runs only if no exception occurs",
+                        "'else' runs only if no exception occurs; 'finally' always runs regardless of exceptions",
+                        "'finally' runs only if no exception occurs; 'else' always runs regardless of exceptions",
+                        "'try' runs only if no exception occurs; 'except' always runs"
                     ],
                     "answer": 1,
-                    "explanation": "The word 'five' cannot be converted to an integer by int(), so it raises a ValueError. The first except block is designed to catch this exact error and print a friendly message.",
-                    "topic": "Errors vs. Exceptions and Basic Handling"
-                },
-                {
-                    "question": "Which keyword is used to define a block of code that will always run, whether an exception occurred or not?",
-                    "options": [
-                        "try",
-                        "except",
-                        "else",
-                        "finally"
-                    ],
-                    "answer": 3,
-                    "explanation": "The finally block is the 'cleanup crew'. The code inside it runs no matter what happens in the try and except blocks—whether there was an error or not.",
+                    "explanation": "The else block runs only if the try block does not raise an exception. The finally block always runs, regardless of exceptions.",
                     "topic": "Errors vs. Exceptions and Basic Handling"
                 },
                 {
@@ -821,18 +434,6 @@
                     ],
                     "answer": 2,
                     "explanation": "The raise keyword allows the programmer to manually trigger an exception, often used for input validation or custom error handling.",
-                    "topic": "Errors vs. Exceptions and Basic Handling"
-                },
-                {
-                    "question": "What is the purpose of the 'else' block in a try-except statement?",
-                    "options": [
-                        "It runs if an exception occurs.",
-                        "It runs only if no exception occurs in the try block.",
-                        "It catches all exceptions automatically.",
-                        "It stops the program execution."
-                    ],
-                    "answer": 1,
-                    "explanation": "The else block runs only if the code in the try block does not raise any exceptions. It's useful for code that should only run after a successful try.",
                     "topic": "Errors vs. Exceptions and Basic Handling"
                 },
                 {
@@ -850,9 +451,9 @@
             ],
             "codeTasks": [
                 {
-                    "question": "Write a program that asks the user for their age. If the user enters a non-numeric value, handle it using a try-except block. If the user enters a negative number, use 'raise' to manually throw a ValueError. If the input is valid and non-negative, check if they are 13 or older and print 'Access granted.' if they are, otherwise print 'Access denied.'",
-                    "starterCode": "# Step 1: Get input and handle non-numeric values\ntry:\n    age = int(input('Enter your age: '))\n    # Step 2: Raise ValueError for negative numbers\n    # your code here\n\n    # Step 3: Check age and print access message\n    # your code here\nexcept ValueError as ve:\n    print('Invalid input:', ve)",
-                    "solutionCode": "try:\n    age = int(input('Enter your age: '))\n    if age < 0:\n        raise ValueError('Age cannot be negative.')\n    if age >= 13:\n        print('Access granted.')\n    else:\n        print('Access denied.')\nexcept ValueError as ve:\n    print('Invalid input:', ve)",
+                    "question": "Write a program that asks the user for their age and determines access based on the input.\n\nFollow these steps carefully:\n\n1. Start a try block using 'try:'.\n\n2. Inside the try block, ask the user to enter their age using input() and store it in a variable called age_input.\n\n3. Convert age_input to an integer and store it in a variable called age.\n\n4. Check if age is negative. If it is, raise a ValueError with the message 'Age cannot be negative.'\n\n5. Still inside the try block, check if age is 13 or older. If yes, print 'Access granted.' Otherwise, print 'Access denied.'\n\n6. Add an except block using 'except ValueError as ve:'. Inside it, print 'Invalid input: ' followed by the exception message.\n\nDo not change the exact printed messages. Your program must print exactly 'Access granted.', 'Access denied.', or 'Invalid input: <message>' as described.",
+                    "starterCode": "# Step 1: Start your try-except block below",
+                    "solutionCode": "try:\n    age_input = input('Enter your age: ')\n    age = int(age_input)\n    if age < 0:\n        raise ValueError('Age cannot be negative.')\n    if age >= 13:\n        print('Access granted.')\n    else:\n        print('Access denied.')\nexcept ValueError as ve:\n    print('Invalid input:', ve)",
                     "expectedOutput": "Example 1 Input: '12' → Output: 'Access denied.'\nExample 2 Input: '15' → Output: 'Access granted.'\nExample 3 Input: '-5' → Output: 'Invalid input: Age cannot be negative.'\nExample 4 Input: 'hello' → Output: 'Invalid input: invalid literal for int() with base 10: 'hello''",
                     "testCases": [
                         {
@@ -964,17 +565,6 @@
                     ],
                     "answer": 0,
                     "explanation": "pen.color('green') sets the pen color to green, so any line drawn after this will appear in green."
-                },
-                {
-                    "question": "Which command will turn the turtle counterclockwise by 90 degrees?",
-                    "options": [
-                        "pen.right(90)",
-                        "pen.left(90)",
-                        "turtle.turnLeft(90)",
-                        "screen.left(90)"
-                    ],
-                    "answer": 1,
-                    "explanation": "pen.left(90) turns the turtle counterclockwise by 90 degrees."
                 }
             ]
         }

@@ -153,24 +153,26 @@
         </div>
       </div>
 
-    
       <div id="assessmentArea" style="display: none">
         <!--Left Pane-->
         <div>
-          <h1>
-            <img
-              src="./assets/python-logo.png"
-              alt="Python Logo"
-              class="logo"
-            />
-            Python Assessment
-            <img src="assets/python-logo.png" alt="Python Logo" class="logo" />
-          </h1>
+          
           <div id="leftPaneContent">
             <p id="currentTopicTitle">Topic: <span>Python Basics</span></p>
-            <div class="spacer"></div>
-            <h2>Questions</h2>
-            <div id="questionNav" class="row"></div>
+            
+            <!-- Progress Indicator -->
+            <div class="progress-indicator">
+              <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+              </div>
+              <div class="progress-text" id="progressText">0 of 0 questions completed</div>
+            </div>
+            
+            <div class="questions-section">
+              <h2>Questions</h2>
+              <div id="questionNav" class="qnav"></div>
+            </div>
+            
             <div class="leftPaneBtns">
               <button id="backBtn" class="btn btn-primary">
                 <span>←</span>
@@ -210,10 +212,12 @@
             </div>
 
             <div id="codeView" style="display: none">
-              <div class="task-description">
-                <h3 id="taskTitle"></h3>
-                <p id="taskDescription"></p>
-              </div>
+              <div class="coding-row">
+                <div class="task-description">
+                  <h3 id="taskTitle"></h3>
+                  <p id="taskDescription"></p>
+                </div>
+              
 
               <div class="editor-shell">
                 <div class="editor-header">
@@ -237,6 +241,7 @@
 Click "Run Code" to test your solution or "Submit" to finalize your answer.</pre
                 >
               </div>
+              </div>
             </div>
           </div>
         </div>
@@ -244,13 +249,26 @@ Click "Run Code" to test your solution or "Submit" to finalize your answer.</pre
 
       <!-- Topic Report View -->
       <div id="topicReportView" class="report-view panel" style="display: none">
-        <h2 id="topicReportHeader">Topic Report</h2>
-        <div id="topicReportContent"></div>
-        <div class="action-buttons">
+        <div class="topic-report-header">
+          <div class="topic-report-header-content">
+            <div class="topic-report-title-section">
+              <h2 class="topic-report-title" id="topicReportHeader">Topic Report</h2>
+              <p class="topic-report-subtitle" id="topicReportSubtitle">Assessment Complete</p>
+            </div>
+            <div class="topic-report-status">
+              <div class="status-badge completed" id="topicStatusBadge">Completed</div>
+              <div class="topic-report-score" id="topicScoreDisplay">0%</div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-report-content" id="topicReportContent">
+          <!-- Content will be populated by JavaScript -->
+        </div>
+        <div class="topic-report-actions">
           <button id="continueToNextTopicBtn" class="btn btn-primary">
             Continue to Next Topic
           </button>
-          <button id="backToTopicsBtn" class="btn btn-primary">
+          <button id="backToTopicsBtn" class="btn btn-secondary">
             <span>←</span>
             Back to Topics
           </button>
@@ -270,28 +288,12 @@ Click "Run Code" to test your solution or "Submit" to finalize your answer.</pre
         class="report-view panel"
         style="display: none"
       >
-        <div
-          style="
-            margin-top: 16px;
-            display: flex;
-            gap: 8px;
-            justify-content: space-between;
-          "
-        >
-          <div class="overall-header">
-            <div>
-              <h1 style="margin: 0; text-align: center; font-size: 35px">
-                Overall Results
-              </h1>
-              <div
-                id="overallSubheading"
-                class="muted"
-                style="font-size: 14px; margin-top: 4px"
-              ></div>
-            </div>
-            <div class="overall-meta" id="overallMeta"></div>
-          </div>
+        <div class="overall-header">
           <div>
+            <h1 class="overall-title">Overall Results</h1>
+            <div id="overallSubheading" class="overall-subheading"></div>
+          </div>
+          <div class="overall-actions">
             <button id="downloadPdfBtn" class="btn btn-secondary no-print">
               <span id="btnText">Download PDF</span>
               <span>📄</span>
@@ -323,31 +325,11 @@ Click "Run Code" to test your solution or "Submit" to finalize your answer.</pre
         </div>
 
         <div class="overall-content">
-          <h2
-            style="
-              font-size: 35px;
-              max-width: 100%;
-              background-color: rgba(255, 169, 83, 0.953);
-              width: 100vw;
-              text-align: center;
-            "
-          >
-            Performance Analysis
-          </h2>
+          <h2 class="section-header">Performance Analysis</h2>
           <div class="overall-chart">
             <canvas id="overallChart" width="800" height="300"></canvas>
           </div>
-          <h2
-            style="
-              font-size: 35px;
-              max-width: 100%;
-              background-color: rgba(255, 169, 83, 0.953);
-              width: 100vw;
-              text-align: center;
-            "
-          >
-            Detailed Analysis
-          </h2>
+          <h2 class="section-header">Detailed Analysis</h2>
           <div class="overall-table-wrapper">
             <table class="overall-table" id="overallTable">
               <thead>
@@ -361,18 +343,29 @@ Click "Run Code" to test your solution or "Submit" to finalize your answer.</pre
               <tbody></tbody>
             </table>
           </div>
-          <h2
-            style="
-              font-size: 35px;
-              max-width: 100%;
-              background-color: rgba(255, 169, 83, 0.953);
-              width: 100vw;
-              text-align: center;
-            "
-          >
-            Review Answers
-          </h2>
+          <h2 class="section-header">Review Answers</h2>
           <div id="reviewAnswers" class="review-answers"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Download Success Popup -->
+    <div id="downloadSuccessPopup" class="popup-overlay" style="display: none;">
+      <div class="popup-container">
+        <div class="popup-header">
+          <div class="popup-icon">✓</div>
+          <h2 class="popup-title">Download Complete!</h2>
+        </div>
+        <div class="popup-content">
+          <p class="popup-message">Your performance report has been successfully downloaded to your device.</p>
+          <div class="popup-instructions">
+            <p><strong>Next Steps:</strong></p>
+            <p>Send the PDF to <a href="mailto:customercare@waytosucceedclasses.com" class="popup-email">customercare@waytosucceedclasses.com</a> or</p>
+            <p>Save it in your drive and share it with your teacher.</p>
+          </div>
+        </div>
+        <div class="popup-actions">
+          <button id="closePopupBtn" class="btn btn-primary">Continue</button>
         </div>
       </div>
     </div>

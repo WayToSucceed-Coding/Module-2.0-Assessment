@@ -106,6 +106,7 @@ document.getElementById('backBtn').onclick = () => {
     // Toggle top-level overall results button if all topics completed
     const showOverallTop = document.getElementById('showOverallResultsBtnTop');
     if (showOverallTop) {
+        const completedTopics = JSON.parse(localStorage.getItem('completedTopics') || '[]');
         if (completedTopics.length && currentModuleData.topics && completedTopics.length === currentModuleData.topics.length) {
             showOverallTop.style.display = '';
             showOverallTop.onclick = () => {
@@ -165,9 +166,27 @@ function loadTopicQuestions() {
         });
     });
 
+    // Load saved answers from localStorage
+    loadSavedAnswers();
 
     renderCurrentItem();
     renderQuestionNav();
+}
+
+function loadSavedAnswers() {
+    // Load answeredMap from localStorage
+    const savedAnswers = JSON.parse(localStorage.getItem('answeredMap') || '[]');
+    answeredMap.clear();
+    savedAnswers.forEach(([key, value]) => {
+        answeredMap.set(key, value);
+    });
+
+    // Load codeMap from localStorage
+    const savedCode = JSON.parse(localStorage.getItem('codeMap') || '[]');
+    codeMap.clear();
+    savedCode.forEach(([key, value]) => {
+        codeMap.set(key, value);
+    });
 }
 
 function renderCurrentItem() {
@@ -186,6 +205,7 @@ function renderCurrentItem() {
     else renderCodeItem(item.data);
 
     highlightQuestionNav();
+    updateProgressIndicator();
 }
 
 function renderQuestionNav() {
@@ -264,6 +284,15 @@ function renderMcqItem(mcq) {
     `);
         mcqOptionsEl.appendChild(wrapper);
     });
+
+    // Restore saved MCQ answer
+    const savedAnswer = answeredMap.get(`${currentTopicIndex}-${currentQuestionIndex}`);
+    if (savedAnswer && savedAnswer.answer !== 'Unanswered' && typeof savedAnswer.answer === 'number') {
+        const radioButton = document.querySelector(`input[name="mcq_${currentTopicIndex}_${currentQuestionIndex}"][value="${savedAnswer.answer}"]`);
+        if (radioButton) {
+            radioButton.checked = true;
+        }
+    }
 }
 
 
@@ -300,8 +329,13 @@ function renderCodeItem(task) {
     runBtn.disabled = false;
     submitBtn.disabled = false;
 
-    // Clear previous output
-    // setOutputs();
+    // Clear previous output and adjust layout
+    setOutputs();
+    
+    // Adjust assessment area height for code view
+    setTimeout(() => {
+        adjustAssessmentAreaHeight();
+    }, 100);
 }
 
 // ----------------------
@@ -513,6 +547,10 @@ async function submitCurrentCode() {                             // Define an as
                 answer: code,
                 correctAnswer: 'Fix structure errors: ' + structureErrors.join('; ')
             });
+
+            // Save to localStorage
+            localStorage.setItem('answeredMap', JSON.stringify(Array.from(answeredMap.entries())));
+            localStorage.setItem('codeMap', JSON.stringify(Array.from(codeMap.entries())));
 
             return; // Stop execution if structure fails
         }
@@ -773,6 +811,10 @@ _expected_str = str(_expected_obj)
             correctAnswer: allPassed ? 'All tests passed' : 'Check expected vs actual output'
         });
 
+        // Save to localStorage
+        localStorage.setItem('answeredMap', JSON.stringify(Array.from(answeredMap.entries())));
+        localStorage.setItem('codeMap', JSON.stringify(Array.from(codeMap.entries())));
+
         setOutputs({                                            // Push the summary message to the UI with success/error.
             message: resultMessage,
             status: allPassed ? 'success' : 'error'
@@ -806,6 +848,10 @@ _expected_str = str(_expected_obj)
             correctAnswer: 'Fix the errors in your code'
         });
 
+        // Save to localStorage
+        localStorage.setItem('answeredMap', JSON.stringify(Array.from(answeredMap.entries())));
+        localStorage.setItem('codeMap', JSON.stringify(Array.from(codeMap.entries())));
+
         updateTopicProgress();                                   // Keep UI in sync even on failure.
         renderQuestionNav();
         checkTopicCompletion();
@@ -838,6 +884,25 @@ function updateTopicProgress() {
     progress.completed = completed;
     progress.correct = correct;
 
+    // Update progress indicator
+    updateProgressIndicator();
+}
+
+function updateProgressIndicator() {
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    
+    if (!progressFill || !progressText) return;
+    
+    const total = linearItems.length;
+    const completed = Array.from(answeredMap.entries()).filter(([key, value]) => 
+        key.startsWith(`${currentTopicIndex}-`) && value.status
+    ).length;
+    
+    const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+    
+    progressFill.style.width = `${percentage}%`;
+    progressText.textContent = `${completed} of ${total} questions completed`;
 }
 
 function checkTopicCompletion() {
@@ -867,6 +932,8 @@ function setOutputs(payload = {}) {
 
     if (!payload.message) {
         feedbackEl.style.display = 'none';
+        // Reset assessment area height when hiding output
+        adjustAssessmentAreaHeight();
         return;
     }
 
@@ -883,6 +950,41 @@ function setOutputs(payload = {}) {
         feedbackEl.classList.add('error');
     } else {
         feedbackEl.classList.add('info');
+    }
+
+    // Adjust assessment area height when showing output
+    setTimeout(() => {
+        adjustAssessmentAreaHeight();
+    }, 100);
+}
+
+function adjustAssessmentAreaHeight() {
+    const assessmentArea = document.getElementById('assessmentArea');
+    const codeOutput = document.getElementById('codeFeedback');
+    
+    if (!assessmentArea || !codeOutput) return;
+
+    // Reset any previous height constraints
+    assessmentArea.style.height = 'auto';
+    assessmentArea.style.maxHeight = 'none';
+    
+    // If code output is visible, ensure the assessment area can accommodate it
+    if (codeOutput.style.display !== 'none') {
+        // Calculate the natural height needed
+        const codeOutputHeight = codeOutput.offsetHeight;
+        const minHeight = Math.max(200, codeOutputHeight + 100); // Add some buffer
+        
+        // Set a minimum height that accommodates the output
+        assessmentArea.style.minHeight = `${minHeight}px`;
+        
+        // Ensure the main container doesn't constrain the height
+        const mainContainer = document.querySelector('.main-container');
+        if (mainContainer) {
+            mainContainer.style.overflow = 'visible';
+        }
+    } else {
+        // Reset to default when no output
+        assessmentArea.style.minHeight = 'calc(100vh - 100px)';
     }
 }
 function htmlToElement(html) {
@@ -903,6 +1005,13 @@ function setupEventListeners() {
     runBtn.addEventListener('click', runCurrentCode);
     submitBtn.addEventListener('click', submitCurrentCode);
     finishBtn.addEventListener('click', finishTopicAssessment);
+    
+    // Add window resize listener to adjust layout
+    window.addEventListener('resize', () => {
+        setTimeout(() => {
+            adjustAssessmentAreaHeight();
+        }, 100);
+    });
 }
 
 
@@ -932,9 +1041,12 @@ function submitCurrentMcq() {
     answeredMap.set(`${currentTopicIndex}-${currentQuestionIndex}`, {
         status: isCorrect ? "correct" : "incorrect",
         topic: item.topic,
-        answer: selected.value,
+        answer: parseInt(selected.value),
         correctAnswer: item.data.answer
     });
+
+    // Save to localStorage
+    localStorage.setItem('answeredMap', JSON.stringify(Array.from(answeredMap.entries())));
 
     updateTopicProgress();
     renderQuestionNav();
@@ -1014,15 +1126,47 @@ function showTopicReport(showAnswers = true) {
     topicReportView.scrollIntoView({ behavior: 'smooth' }); // scroll to top
 
     const header = topicReportView.querySelector('#topicReportHeader');
-    header.textContent = `${topic.name} - Topic Complete!`;
+    const subtitle = topicReportView.querySelector('#topicReportSubtitle');
+    const statusBadge = topicReportView.querySelector('#topicStatusBadge');
+    const scoreDisplay = topicReportView.querySelector('#topicScoreDisplay');
+    
+    header.textContent = `${topic.name} - Complete!`;
+    subtitle.textContent = `Assessment finished with ${progress.correct}/${progress.total} correct answers`;
+    
+    // Update status badge and score display based on performance
+    const score = Math.round((progress.correct / progress.total) * 100);
+    scoreDisplay.textContent = `${score}%`;
+    
+    if (score >= 80) {
+        statusBadge.textContent = 'Excellent';
+        statusBadge.className = 'status-badge excellent';
+    } else if (score >= 60) {
+        statusBadge.textContent = 'Good Job';
+        statusBadge.className = 'status-badge completed';
+    } else {
+        statusBadge.textContent = 'Keep Learning';
+        statusBadge.className = 'status-badge';
+    }
 
     const content = topicReportView.querySelector('#topicReportContent');
+    const incorrect = progress.total - progress.correct;
+    
     content.innerHTML = `
-        <div class="report-summary">
-            <h3>Topic Performance: ${progress.correct}/${progress.total} Correct</h3>
-            <p>Score: ${Math.round((progress.correct / progress.total) * 100)}%</p>
+        <div class="topic-report-metrics">
+            <div class="metric-card correct">
+                <div class="metric-card-value">${progress.correct}</div>
+                <div class="metric-card-label">Correct</div>
+            </div>
+            <div class="metric-card incorrect">
+                <div class="metric-card-value">${incorrect}</div>
+                <div class="metric-card-label">Incorrect</div>
+            </div>
+            <div class="metric-card score">
+                <div class="metric-card-value">${score}%</div>
+                <div class="metric-card-label">Score</div>
+            </div>
         </div>
-        <div class="topic-report">
+        <div class="topic-report-answers">
             <h4>Review Your Answers</h4>
             ${generateTopicQuestionResults(showAnswers)}
         </div>
@@ -1037,16 +1181,11 @@ function showTopicReport(showAnswers = true) {
     };
 
     const continueBtn = topicReportView.querySelector('#continueToNextTopicBtn');
-    continueBtn.onclick = () => {
-        topicReportView.style.display = 'none';
-        const nextIndex = currentTopicIndex + 1;
-        if (nextIndex < currentModuleData.topics.length) {
-            switchToTopic(nextIndex);
-        } else {
-            alert('No more topics left!');
-            document.getElementById('topicSelectionPane').style.display = 'block';
-        }
-    };
+    if (continueBtn) {
+        // Hide continue button per requirement
+        continueBtn.style.display = 'none';
+        continueBtn.onclick = null;
+    }
 
     // Show overall results button if all topics are completed
     const overallBtn = topicReportView.querySelector('#showOverallResultsBtn');
@@ -1354,8 +1493,8 @@ function showOverallResults() {
     currentModuleData.topics.forEach((t, i) => {
         currentTopicIndex = i;
         const div = `
-        <div class="report-summary" style="align-items: center;justify-content: center;">
-            <h3 style="font-size:30px; text-align:center; margin-bottom:20px">${t.name}</h3>
+        <div class="report-summary">
+            <h3>${t.name}</h3>
             ${generateTopicQuestionResults(true)}
         </div>`
 
@@ -1583,7 +1722,10 @@ async function downloadOverallResultsPdf() {
     pdf.save('performance-report.pdf');
 
     downloadBtn.disabled = false;
-    btnText.textContent = 'Download';
+    btnText.textContent = 'Download PDF';
+    
+    // Show success popup
+    showDownloadSuccessPopup();
 }
 
 
@@ -1661,5 +1803,47 @@ async function emailOverallResultsToTeacher({ labels, scores }) {
         alert('Results emailed to teacher.');
     } catch (err) {
         alert('Failed to email results: ' + err.message + '\nPlease configure the backend endpoint.');
+    }
+}
+
+// ----------------------
+// Download Success Popup
+// ----------------------
+function showDownloadSuccessPopup() {
+    const popup = document.getElementById('downloadSuccessPopup');
+    if (popup) {
+        popup.style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        
+        // Add event listener for close button
+        const closeBtn = document.getElementById('closePopupBtn');
+        if (closeBtn) {
+            closeBtn.onclick = hideDownloadSuccessPopup;
+        }
+        
+        // Add event listener for overlay click to close
+        popup.onclick = (e) => {
+            if (e.target === popup) {
+                hideDownloadSuccessPopup();
+            }
+        };
+        
+        // Add escape key listener
+        document.addEventListener('keydown', handleEscapeKey);
+    }
+}
+
+function hideDownloadSuccessPopup() {
+    const popup = document.getElementById('downloadSuccessPopup');
+    if (popup) {
+        popup.style.display = 'none';
+        document.body.style.overflow = ''; // Restore scrolling
+        document.removeEventListener('keydown', handleEscapeKey);
+    }
+}
+
+function handleEscapeKey(e) {
+    if (e.key === 'Escape') {
+        hideDownloadSuccessPopup();
     }
 }
