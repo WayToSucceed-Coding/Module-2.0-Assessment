@@ -103,11 +103,11 @@
   </head>
 
   <body>
-    <!-- Watermark overlay -->
-    <div class="watermark-overlay"></div>
+  
 
     <header class="navbar">
-      <img src="./assets/company_logo.png" alt="Header" class="header-image" />
+      <img src="./assets/logo.png" alt="Logo" class="nav-logo" />
+      <img src="./assets/header.png" alt="Header" class="nav-header-image" />
     </header>
 
     <div class="main-container">
@@ -154,43 +154,31 @@
       </div>
 
       <div id="assessmentArea" style="display: none">
-        <!--Left Pane-->
-        <div>
-          
-          <div id="leftPaneContent">
-            <p id="currentTopicTitle">Topic: <span>Python Basics</span></p>
-            
-            <!-- Progress Indicator -->
-            <div class="progress-indicator">
-              <div class="progress-bar">
-                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        <div id="assessmentHeader">
+          <p id="currentTopicTitle">Topic: <span>Python Basics</span></p>
+          <div class="questions-section">
+            <div class="question-controls">
+              <div class="qc-left">
+                <button id="backBtn" class="btn btn-primary">
+                  <span>←</span>
+                  Back To Topics
+                </button>
               </div>
-              <div class="progress-text" id="progressText">0 of 0 questions completed</div>
-            </div>
-            
-            <div class="questions-section">
-              <h2>Questions</h2>
-              <div id="questionNav" class="qnav"></div>
-            </div>
-            
-            <div class="leftPaneBtns">
-              <button id="backBtn" class="btn btn-primary">
-                <span>←</span>
-                Back To Topics
-              </button>
-              <button id="finishBtn" class="btn btn-green">
-                <span>🏁</span>
-                Finish
-              </button>
+              <div class="qc-center">
+                <div id="questionNav" class="qnav"></div>
+              </div>
+              <div class="qc-right">
+                <button id="finishBtn" class="btn btn-green">
+                  <span>🏁</span>
+                  Finish
+                </button>
+              </div>
             </div>
           </div>
         </div>
-        <!--Right Pane-->
         <div id="rightPane">
           <div id="questionContainer" style="display: none">
-            <h2 id="questionHeader">
-              Question <span id="questionNumber"></span>
-            </h2>
+            <h2 id="questionHeader" style="display: none"></h2>
             <div id="mcqView" style="display: none">
               <div
                 id="mcqQuestion"
@@ -214,33 +202,32 @@
             <div id="codeView" style="display: none">
               <div class="coding-row">
                 <div class="task-description">
-                  <h3 id="taskTitle"></h3>
+                  <h2 id="taskTitle"></h2>
                   <p id="taskDescription"></p>
                 </div>
-              
-
-              <div class="editor-shell">
-                <div class="editor-header">
-                  <div class="editor-title">Python Editor</div>
-                  <div class="editor-controls">
-                    <button id="runBtn" class="btn btn-secondary">
-                      <span>▶️</span>
-                      Run Code
-                    </button>
-                    <button id="submitBtn" class="btn btn-primary">
-                      <span>📤</span>
-                      Submit
-                    </button>
+                <div class="code-workspace">
+                  <div class="editor-shell">
+                    <div class="editor-header">
+                      <div class="editor-title">Python Editor</div>
+                      <div class="editor-controls">
+                        <button id="runBtn" class="btn btn-secondary">
+                          <span>▶️</span>
+                          Run Code
+                        </button>
+                        <button id="submitBtn" class="btn btn-primary">
+                          <span>📤</span>
+                          Submit
+                        </button>
+                      </div>
+                    </div>
+                    <textarea id="editor"></textarea>
+                  </div>
+                  <div class="code-output" id="codeFeedback" style="display: none">
+                    <pre id="codeFeedbackText">
+Click "Run Code" to test your solution or "Submit" to finalize your answer.</pre
+                    >
                   </div>
                 </div>
-                <textarea id="editor"></textarea>
-              </div>
-
-              <div class="code-output" id="codeFeedback" style="display: none">
-                <pre id="codeFeedbackText">
-Click "Run Code" to test your solution or "Submit" to finalize your answer.</pre
-                >
-              </div>
               </div>
             </div>
           </div>
@@ -366,6 +353,23 @@ Click "Run Code" to test your solution or "Submit" to finalize your answer.</pre
         </div>
         <div class="popup-actions">
           <button id="closePopupBtn" class="btn btn-primary">Continue</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Finish Confirmation Popup -->
+    <div id="finishConfirmPopup" class="popup-overlay" style="display: none;">
+      <div class="popup-container">
+        <div class="popup-header">
+          <div class="popup-icon">🏁</div>
+          <h2 class="popup-title">Finish Topic?</h2>
+        </div>
+        <div class="popup-content">
+          <p class="popup-message">Are you sure you want to finish this topic? Unanswered questions will be marked as Unanswered.</p>
+        </div>
+        <div class="popup-actions" style="display:flex; gap:10px; justify-content:center;">
+          <button id="cancelFinishBtn" class="btn btn-secondary">Cancel</button>
+          <button id="confirmFinishBtn" class="btn btn-green">Finish</button>
         </div>
       </div>
     </div>

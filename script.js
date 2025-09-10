@@ -195,11 +195,9 @@ function renderCurrentItem() {
 
     const item = linearItems[currentQuestionIndex];
 
-    // Update question header with number
+    // Hide question number per requirement
     const questionNumberEl = document.getElementById('questionNumber');
-    if (questionNumberEl) {
-        questionNumberEl.textContent = `${currentQuestionIndex + 1} of ${linearItems.length}`;
-    }
+    if (questionNumberEl) questionNumberEl.textContent = '';
 
     if (item.type === 'mcq') renderMcqItem(item.data);
     else renderCodeItem(item.data);
@@ -1060,9 +1058,35 @@ function submitCurrentMcq() {
 }
 
 function finishTopicAssessment() {
+    // Show elegant popup instead of confirm
+    const popup = document.getElementById('finishConfirmPopup');
+    if (popup) {
+        popup.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+
+        const cancelBtn = document.getElementById('cancelFinishBtn');
+        const confirmBtn = document.getElementById('confirmFinishBtn');
+
+        const closePopup = () => {
+            popup.style.display = 'none';
+            document.body.style.overflow = '';
+        };
+
+        if (cancelBtn) cancelBtn.onclick = closePopup;
+        if (confirmBtn) confirmBtn.onclick = () => {
+            closePopup();
+            proceedFinishTopic();
+        };
+        return;
+    }
+
+    // Fallback
     const confirmFinish = confirm('Are you sure you want to finish this topic?');
     if (!confirmFinish) return;
+    proceedFinishTopic();
+}
 
+function proceedFinishTopic() {
     document.getElementById('assessmentArea').style.display = 'none';
 
     const topic = currentModuleData.topics[currentTopicIndex];
@@ -1558,7 +1582,7 @@ async function downloadOverallResultsPdf() {
         });
 
     const headerImg = await loadImageAsync('assets/banner.png');
-    const watermarkImg = await loadImageAsync('assets/header.png');
+    const watermarkImg = await loadImageAsync('assets/watermark.png');
     const logoImg = await loadImageAsync('assets/logo.png');
     const logoWidth = 25;
     const logoHeight = (logoImg.height * logoWidth) / logoImg.width;
@@ -1726,6 +1750,13 @@ async function downloadOverallResultsPdf() {
     
     // Show success popup
     showDownloadSuccessPopup();
+
+    // Clear all assessment data from localStorage after successful download
+    try {
+        localStorage.clear();
+    } catch (e) {
+        console.warn('Unable to clear localStorage:', e);
+    }
 }
 
 
