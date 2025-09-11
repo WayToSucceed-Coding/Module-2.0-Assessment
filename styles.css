@@ -914,7 +914,8 @@
           overflow: hidden;
           
       }
-
+      
+   
       .topic-report-header {
           background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
           color: #1e293b;
@@ -1055,6 +1056,7 @@
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
           border: 1px solid #e2e8f0;
           margin-bottom: 24px;
+          width: fit-content
       }
 
       .topic-report-answers h4 {
@@ -2404,9 +2406,7 @@
       .question-result {
           display: flex;
           gap: 16px;
-          /* spacing between columns */
           align-items: flex-start;
-          /* align top of all columns */
           border-bottom: 1px solid #f1f5f9;
           background: #f8fafc;
           border-radius: 8px;
@@ -2499,6 +2499,7 @@
           align-self: flex-end;
           font-family: monospace;
           border-radius: 4px;
+          overflow: auto;
       }
 
       /* Keep topic report action buttons visible */

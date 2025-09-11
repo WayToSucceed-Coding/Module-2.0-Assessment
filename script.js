@@ -1138,7 +1138,7 @@ function markTopicCompleted(topicName) {
 }
 
 function showTopicReport(showAnswers = true) {
-    window.scrollTo(0, 0);
+    //window.scrollTo(0, 0);
     const topic = currentModuleData.topics[currentTopicIndex];
     const progress = topicProgress.get(topic.name);
 
@@ -1870,6 +1870,7 @@ function hideDownloadSuccessPopup() {
         popup.style.display = 'none';
         document.body.style.overflow = ''; // Restore scrolling
         document.removeEventListener('keydown', handleEscapeKey);
+        window.location.reload();
     }
 }
 
