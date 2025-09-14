@@ -28,66 +28,37 @@
                     "explanation": "local variables exist only inside the function where they are created, nonlocal variables are used in nested functions referring to the nearest enclosing scope, and global variables are defined outside functions and accessible throughout the program."
                 },
                 {
-                    "question": "In Python, what do the functions map(), filter(), and zip() do?",
+                    "question": "What will be the output of this code?\n\n\ndef square(x):\n    return x * x\n\nnumbers = [1, 2, 3]\nresult = list(map(square, numbers))\nprint(result)\n",
                     "options": [
-                        "map() applies a function to each item, filter() keeps items that meet a condition, and zip() pairs elements from multiple lists",
-                        "map() filters items, filter() applies a function, and zip() sorts lists",
-                        "map() joins lists, filter() removes duplicates, and zip() reverses lists",
-                        "map(), filter(), and zip() all return errors if used together"
+                        "[1, 2, 3]",
+                        "[1, 4, 9]",
+                        "[2, 4, 6]",
+                        "[1, 8, 27]"
                     ],
-                    "answer": 0,
-                    "explanation": "map() transforms each element with a function, filter() selects elements that satisfy a condition, and zip() combines elements by position into tuples."
+                    "answer": 1,
+                    "explanation": "`map()` applies the `square` function to each element of the list `[1, 2, 3]`, resulting in `[1, 4, 9]`."
                 }
             ],
             "codeTasks": [
                 {
-                    "question": "You need to create a system that applies a bonus to multiple student marks.\n\nSteps:\n1. Create a global variable named `bonus` and assign it the value 5.\n2. Define a function called `process_marks` that takes any number of arguments (`*args`).\n3. Inside `process_marks`, create a variable named `total_bonus` and set it equal to 0.\n4. Still inside `process_marks`, define a nested function called `apply_bonus` that takes one parameter `mark`.\n5. Inside `apply_bonus`, declare `total_bonus` as nonlocal so it can be modified.\n6. Inside `apply_bonus`, increase `total_bonus` by the value of the global variable `bonus`.\n7. Inside `apply_bonus`, return the sum of `mark` and the global variable `bonus`.\n8. After defining `apply_bonus` but inside `process_marks`, call the `map()` function with `apply_bonus` as the first argument and the list of marks (`args`) as the second argument. Store the result in a variable named `new_marks` after converting it into a list.\n9. Return `new_marks` from `process_marks`.\n\nExample: Calling `process_marks(70, 80, 90)` should return `[75, 85, 95]`.",
-                    "starterCode": "# Your code here",
-                    "expectedOutput": "[75, 85, 95]",
-                    "solutionCode": "bonus = 5\n\ndef process_marks(*args):\n    total_bonus = 0\n    def apply_bonus(mark):\n        nonlocal total_bonus\n        total_bonus += bonus\n        return mark + bonus\n    new_marks = list(map(apply_bonus, args))\n    return new_marks",
+                    "question": "The function `greet` is already defined below:\n\ndef greet(name):\n    return f'Hello, {name}!'\n\nYour task is to call this function with the argument `'Ravi'` and print the result.",
+                    "starterCode": "def greet(name):\n    return f'Hello, {name}!'\n\n# Call the function here",
+                    "expectedOutput": "Hello, Ravi!",
+                    "solutionCode": "def greet(name):\n    return f'Hello, {name}!'\n\nprint(greet('Ravi'))",
                     "testCases": [
                         {
-                            "mode": "function",
-                            "call": {
-                                "name": "process_marks",
-                                "args": [
-                                    70,
-                                    80,
-                                    90
-                                ]
-                            },
-                            "expectedReturn": [
-                                75,
-                                85,
-                                95
-                            ]
-                        },
-                        {
-                            "mode": "function",
-                            "call": {
-                                "name": "process_marks",
-                                "args": [
-                                    50,
-                                    60
-                                ]
-                            },
-                            "expectedReturn": [
-                                55,
-                                65
-                            ]
+                            "mode": "io",
+                            "input": [],
+                            "expected": "Hello, Ravi!\n"
                         }
                     ],
                     "structureRequirements": {
                         "functions": [
-                            "process_marks",
-                            "apply_bonus"
+                            "greet"
                         ],
                         "mustUseForLoop": false,
                         "mustUseWhileLoop": false,
-                        "forbidden": [
-                            "eval(",
-                            "exec("
-                        ]
+                        "forbidden": []
                     }
                 }
             ]
@@ -143,41 +114,24 @@
             ],
             "codeTasks": [
                 {
-                    "question": "You need to sort a dictionary by its values in descending order.\n\nSteps:\n1. Create a dictionary called 'fruits' with these key-value pairs: 'apple': 4, 'banana': 2, 'orange': 6.\n2. Convert the dictionary into a list of tuples called 'items' using the items() method: items = list(fruits.items()).\n3. Sort the 'items' list in-place using items.sort(key=lambda x: x[1], reverse=True) and store the result in a variable called 'sorted_items'.\n4. Print sorted_items to see the result.\n\nExample: After sorting, sorted_items should be [('orange', 6), ('apple', 4), ('banana', 2)].",
-                    "starterCode": "# Step 1: Create the dictionary\n# Step 2: Convert dictionary to list of tuples\n# Step 3: Sort the list in-place and store in 'sorted_items'\n# Step 4: Print 'sorted_items'",
-                    "expectedOutput": "[['orange', 6], ['apple', 4], ['banana', 2]]",
-                    "solutionCode": "fruits = {'apple': 4, 'banana': 2, 'orange': 6}\nitems = list(fruits.items())\nitems.sort(key=lambda x: x[1], reverse=True)\nsorted_items = items\nprint(sorted_items)",
+                    "question": "Use a list comprehension to create a new list that contains all the words from `words = [\"hi\", \"hello\", \"hey\"]` in uppercase. Store this list in the variable `result` and print it.",
+                    "hint": "You can use the string method `.upper()` to convert a word to uppercase.",
+                    "starterCode": "words = [\"hi\", \"hello\", \"hey\"]\n# write your code here\n",
+                    "expectedOutput": "[\"HI\", \"HELLO\", \"HEY\"]",
+                    "solutionCode": "words = [\"hi\", \"hello\", \"hey\"]\nresult = [w.upper() for w in words]\nprint(result)\n",
                     "testCases": [
                         {
-                            "mode": "function",
-                            "call": {
-                                "name": "sorted_items",
-                                "args": []
-                            },
-                            "expectedReturn": [
-                                [
-                                    "orange",
-                                    6
-                                ],
-                                [
-                                    "apple",
-                                    4
-                                ],
-                                [
-                                    "banana",
-                                    2
-                                ]
-                            ]
+                            "mode": "io",
+                            "input": [],
+                            "expected": "[\"HI\", \"HELLO\", \"HEY\"]\n"
                         }
                     ],
                     "structureRequirements": {
-                        "functions": [],
-                        "mustUseForLoop": false,
-                        "mustUseWhileLoop": false,
-                        "forbidden": [
-                            "eval(",
-                            "exec("
-                        ]
+                        "variables": [
+                            "result"
+                        ],
+                        "mustUseListComprehension": true,
+                        "forbidden": []
                     }
                 }
             ]
@@ -288,25 +242,21 @@
             ],
             "codeTasks": [
                 {
-                    "question": "You need to create a system to handle different types of vehicles.\n\nFollow these exact steps:\n\n1. Import ABC and abstractmethod from the abc module.\n   - Write: `from abc import ABC, abstractmethod`\n\n2. Create an abstract class called Vehicle that inherits from ABC.\n\n3. In the Vehicle class, define an __init__() method with parameters `self`, `brand`, and `speed`.\n   - Inside __init__(), assign `self.brand = brand`.\n   - Make `speed` a private attribute by assigning it to `self.__speed = speed`.\n\n4. Define a method `get_speed(self)` inside Vehicle that returns `self.__speed`.\n\n5. Inside Vehicle, define an abstract method `fuel_type(self)` using the @abstractmethod decorator.\n\n6. Create a subclass Car that inherits from Vehicle.\n   - Implement `fuel_type(self)` to return the string `'Petrol'`.\n\n7. Create a subclass ElectricScooter that inherits from Vehicle.\n   - Implement `fuel_type(self)` to return the string `'Electric'`.\n\n8. Define a function called `create_vehicles()`.\n   - Inside this function, create an object `car` of type Car with brand `'Tesla'` and speed `120`.\n   - Create an object `scooter` of type ElectricScooter with brand `'Yamaha'` and speed `45`.\n   - Return a **single string using an f-string** in this exact format:\n     `f\"{car.brand},{car.get_speed()},{car.fuel_type()},\n{scooter.brand},{scooter.get_speed()},{scooter.fuel_type()}\"`\n   - Do not hardcode values like `'Tesla'` or `'Yamaha'`; use the object attributes and methods.\n   - Do not use print statements.\n\n9. The function `create_vehicles()` should be the only output of your code.",
-                    "starterCode": "# Step 1: Import ABC and abstractmethod\n# Step 2: Define Vehicle class inheriting ABC\n# Step 3: Define __init__ with brand and speed (private)\n# Step 4: Define get_speed method\n# Step 5: Define abstract method fuel_type\n# Step 6: Define Car subclass and implement fuel_type\n# Step 7: Define ElectricScooter subclass and implement fuel_type\n# Step 8: Define create_vehicles() function and return the formatted string using object attributes and f-string",
-                    "expectedOutput": "Tesla,120,Petrol,Yamaha,45,Electric",
-                    "solutionCode": "from abc import ABC, abstractmethod\n\nclass Vehicle(ABC):\n    def __init__(self, brand, speed):\n        self.brand = brand\n        self.__speed = speed\n\n    def get_speed(self):\n        return self.__speed\n\n    @abstractmethod\n    def fuel_type(self):\n        pass\n\nclass Car(Vehicle):\n    def fuel_type(self):\n        return 'Petrol'\n\nclass ElectricScooter(Vehicle):\n    def fuel_type(self):\n        return 'Electric'\n\ndef create_vehicles():\n    car = Car('Tesla', 120)\n    scooter = ElectricScooter('Yamaha', 45)\n    return f\"{car.brand},{car.get_speed()},{car.fuel_type()},{scooter.brand},{scooter.get_speed()},{scooter.fuel_type()}\"",
+                    "question": "Create an object of the `Car` class with `brand='Tesla'` and `speed=120`. Then call the method in `Car` using the object so that it prints the car details.\n\nCode given:\n\nclass Vehicle:\n    def __init__(self, brand, speed):\n        self.brand = brand\n        self.speed = speed\n\nclass Car(Vehicle):\n    def fuel_type(self):\n        return 'Petrol'\n\n    def show_info(self):\n        print(f\"{self.brand},{self.speed},{self.fuel_type()}\")",
+                    "starterCode": "# Create object and call method below",
+                    "solutionCode": "class Vehicle:\n    def __init__(self, brand, speed):\n        self.brand = brand\n        self.speed = speed\n\nclass Car(Vehicle):\n    def fuel_type(self):\n        return 'Petrol'\n\n    def show_info(self):\n        print(f\"{self.brand},{self.speed},{self.fuel_type()}\")\n\ncar = Car('Tesla', 120)\ncar.show_info()",
+                    "expectedOutput": "Tesla,120,Petrol",
                     "testCases": [
                         {
-                            "mode": "function",
-                            "call": {
-                                "name": "create_vehicles",
-                                "args": []
-                            },
-                            "expectedReturn": "Tesla,120,Petrol,Yamaha,45,Electric"
+                            "mode": "io",
+                            "input": [],
+                            "expected": "Tesla,120,Petrol\n"
                         }
                     ],
                     "structureRequirements": {
                         "functions": [
-                            "get_speed",
                             "fuel_type",
-                            "create_vehicles"
+                            "show_info"
                         ],
                         "mustUseForLoop": false,
                         "mustUseWhileLoop": false,
@@ -369,16 +319,16 @@
             ],
             "codeTasks": [
                 {
-                    "question": "Write a program that simulates a lucky draw.\n\nFollow these steps carefully:\n\n1. Use the provided list of participants (do not modify this list):\n   `participants = [\"Alice\", \"Bob\", \"Charlie\", \"David\", \"Eve\"]`\n\n2. Import the required modules: `random` and `time`.\n\n3. Print the message 'Starting the lucky draw...' and pause the program for 3 seconds using `time.sleep()`.\n\n4. Randomly select one winner from the participants list using `random.choice()`.\n\n5. Print the winner in the format: 'The winner is: <name>', where `<name>` is the randomly selected participant.",
-                    "starterCode": "# Step 1: Import modules\n\nparticipants = [\"Alice\", \"Bob\", \"Charlie\", \"David\", \"Eve\"]\n\n# Step 2: Print starting message and pause\n\n# Step 3: Select a random winner\n\n# Step 4: Print the winner",
-                    "solutionCode": "import random\nimport time\n\nparticipants = [\"Alice\", \"Bob\", \"Charlie\", \"David\", \"Eve\"]\n\nprint('Starting the lucky draw...')\ntime.sleep(3)\n\nwinner = random.choice(participants)\nprint('The winner is:', winner)",
-                    "expectedOutput": "Starting the lucky draw...\n(The program pauses for 3 seconds)\nThe winner is: <name>",
+                    "question": "Complete the program to finish the lucky draw.\n\nCode given:\n\nimport random\nstudents = [\"Aarav\", \"Sakura\", \"Diego\", \"Amara\", \"Liam\"]\n\nprint('Starting the lucky draw...')\n\nYour task is only to:\n- Store the randomly selected student in a variable called `winner` using `random.choice()`.\n- Print the result in this format: `The winner is: <name>`",
+                    "starterCode": "#Select the winner and print the result here",
+                    "solutionCode": "import random\nimport time\n\nstudents = [\"Aarav\", \"Sakura\", \"Diego\", \"Amara\", \"Liam\"]\n\nprint('Starting the lucky draw...')\ntime.sleep(2)\n\nwinner = random.choice(students)\nprint('The winner is:', winner)",
+                    "expectedOutput": "Starting the lucky draw...\n(The program pauses for 2 seconds)\nThe winner is: <winner>",
                     "testCases": [
                         {
                             "mode": "io",
                             "input": [],
                             "compare": "regex",
-                            "expectedRegex": "The winner is:\\s*(Alice|Bob|Charlie|David|Eve)"
+                            "expectedRegex": "The winner is:\\s*(Aarav|Sakura|Diego|Amara|Liam)"
                         }
                     ],
                     "structureRequirements": {
@@ -451,8 +401,8 @@
             ],
             "codeTasks": [
                 {
-                    "question": "Write a program that asks the user for their age and determines access based on the input.\n\nFollow these steps carefully:\n\n1. Start a try block using 'try:'.\n\n2. Inside the try block, ask the user to enter their age using input() and store it in a variable called age_input.\n\n3. Convert age_input to an integer and store it in a variable called age.\n\n4. Check if age is negative. If it is, raise a ValueError with the message 'Age cannot be negative.'\n\n5. Still inside the try block, check if age is 13 or older. If yes, print 'Access granted.' Otherwise, print 'Access denied.'\n\n6. Add an except block using 'except ValueError as ve:'. Inside it, print 'Invalid input: ' followed by the exception message.\n\nDo not change the exact printed messages. Your program must print exactly 'Access granted.', 'Access denied.', or 'Invalid input: <message>' as described.",
-                    "starterCode": "# Step 1: Start your try-except block below",
+                    "question": "Complete the program to handle invalid age input using exception handling.\n\nCode given:\n\ntry:\n    age_input = input('Enter your age: ')\n    age = int(age_input)\n    if age < 0:\n        raise ValueError('Age cannot be negative.')\n    if age >= 13:\n        print('Access granted.')\n    else:\n        print('Access denied.')\n\nYour task:\n- Add an `except ValueError as ve:` block.\n- Inside it, print `Invalid input:` followed by `ve`.",
+                    "starterCode": "# TODO: Write the except block here",
                     "solutionCode": "try:\n    age_input = input('Enter your age: ')\n    age = int(age_input)\n    if age < 0:\n        raise ValueError('Age cannot be negative.')\n    if age >= 13:\n        print('Access granted.')\n    else:\n        print('Access denied.')\nexcept ValueError as ve:\n    print('Invalid input:', ve)",
                     "expectedOutput": "Example 1 Input: '12' → Output: 'Access denied.'\nExample 2 Input: '15' → Output: 'Access granted.'\nExample 3 Input: '-5' → Output: 'Invalid input: Age cannot be negative.'\nExample 4 Input: 'hello' → Output: 'Invalid input: invalid literal for int() with base 10: 'hello''",
                     "testCases": [
@@ -486,12 +436,8 @@
                         }
                     ],
                     "structureRequirements": {
-                        "functions": [],
-                        "mustUseForLoop": false,
-                        "mustUseWhileLoop": false,
                         "mustUseTryExcept": true,
-                        "mustUseRaise": true,
-                        "forbidden": []
+                        "mustUseRaise": true
                     }
                 }
             ]
