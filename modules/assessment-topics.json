@@ -101,15 +101,15 @@
                     "explanation": "Dictionary comprehension allows filtering items by value; only keys with value > 3 are included."
                 },
                 {
-                    "question": "How can you create a dictionary from two lists, one containing keys and the other values?",
+                    "question": "Which of the following creates a dictionary with words as keys and their lengths as values?\n\nwords = ['hi', 'hello', 'hey']",
                     "options": [
-                        "{k:v for k,v in zip(keys, values)}",
-                        "[k:v for k,v in zip(keys, values)]",
-                        "{keys, values}",
-                        "zip(keys, values)"
+                        "{word: len(word) for word in words}",
+                        "[word: len(word) for word in words]",
+                        "(word: len(word) for word in words)",
+                        "{word, len(word) for word in words}"
                     ],
                     "answer": 0,
-                    "explanation": "Dictionary comprehension combined with zip() allows mapping each key to its corresponding value."
+                    "explanation": "Dictionary comprehension uses {key: value for item in iterable}. Here each word is the key and len(word) gives its length as the value."
                 }
             ],
             "codeTasks": [

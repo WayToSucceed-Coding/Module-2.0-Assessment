@@ -22,6 +22,8 @@
           --editor-string: #34d399;
           --editor-comment: #64748b;
           --editor-function: #60a5fa;
+          --done:#bab3b3;
+
       }
 
       * {
@@ -2312,14 +2314,13 @@
       }
 
       .qbtn.done {
-          border-color: var(--ok);
-          background: linear-gradient(135deg, var(--ok), #15803d);
+          border-color: var(--done);
+          background: linear-gradient(135deg, var(--done), #6e706f);
           color: white;
           box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3);
       }
 
       .qbtn.done::after {
-          content: "✓";
           position: absolute;
           top: -2px;
           right: -2px;

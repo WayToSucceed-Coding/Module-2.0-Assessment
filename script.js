@@ -41,7 +41,7 @@ const taskDescription = document.getElementById('taskDescription');
 
 const downloadBtn = document.getElementById('downloadPdfBtn');
 const mainContainer = document.querySelector('.main-container');
-   
+
 // ----------------------
 // Module loading & UI
 // ----------------------
@@ -329,7 +329,7 @@ function renderCodeItem(task) {
 
     // Clear previous output and adjust layout
     setOutputs();
-    
+
     // Adjust assessment area height for code view
     setTimeout(() => {
         adjustAssessmentAreaHeight();
@@ -889,16 +889,16 @@ function updateTopicProgress() {
 function updateProgressIndicator() {
     const progressFill = document.getElementById('progressFill');
     const progressText = document.getElementById('progressText');
-    
+
     if (!progressFill || !progressText) return;
-    
+
     const total = linearItems.length;
-    const completed = Array.from(answeredMap.entries()).filter(([key, value]) => 
+    const completed = Array.from(answeredMap.entries()).filter(([key, value]) =>
         key.startsWith(`${currentTopicIndex}-`) && value.status
     ).length;
-    
+
     const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
-    
+
     progressFill.style.width = `${percentage}%`;
     progressText.textContent = `${completed} of ${total} questions completed`;
 }
@@ -959,22 +959,22 @@ function setOutputs(payload = {}) {
 function adjustAssessmentAreaHeight() {
     const assessmentArea = document.getElementById('assessmentArea');
     const codeOutput = document.getElementById('codeFeedback');
-    
+
     if (!assessmentArea || !codeOutput) return;
 
     // Reset any previous height constraints
     assessmentArea.style.height = 'auto';
     assessmentArea.style.maxHeight = 'none';
-    
+
     // If code output is visible, ensure the assessment area can accommodate it
     if (codeOutput.style.display !== 'none') {
         // Calculate the natural height needed
         const codeOutputHeight = codeOutput.offsetHeight;
         const minHeight = Math.max(200, codeOutputHeight + 100); // Add some buffer
-        
+
         // Set a minimum height that accommodates the output
         assessmentArea.style.minHeight = `${minHeight}px`;
-        
+
         // Ensure the main container doesn't constrain the height
         const mainContainer = document.querySelector('.main-container');
         if (mainContainer) {
@@ -1003,7 +1003,7 @@ function setupEventListeners() {
     runBtn.addEventListener('click', runCurrentCode);
     submitBtn.addEventListener('click', submitCurrentCode);
     finishBtn.addEventListener('click', finishTopicAssessment);
-    
+
     // Add window resize listener to adjust layout
     window.addEventListener('resize', () => {
         setTimeout(() => {
@@ -1062,6 +1062,18 @@ function finishTopicAssessment() {
     const popup = document.getElementById('finishConfirmPopup');
     if (popup) {
         popup.style.display = 'flex';
+        const answeredStatus = document.getElementById('answeredStatus')
+        const myCurrentTopic = currentModuleData.topics[currentTopicIndex].name;
+        var temp = new Map(JSON.parse(localStorage.getItem('answeredMap') || '{}'))
+        const filteredPairs = new Map();
+
+        for (const [key, value] of temp.entries()) {
+            if (value.topic === myCurrentTopic) {
+                filteredPairs.set(key, value);
+            }
+        }
+
+        answeredStatus.innerHTML = `You answered <b style="color: #007BFF;">${filteredPairs.size}</b> out of <b style="color: #007BFF;">${linearItems.length}</b> questions.`;
         document.body.style.overflow = 'hidden';
 
         const cancelBtn = document.getElementById('cancelFinishBtn');
@@ -1153,14 +1165,14 @@ function showTopicReport(showAnswers = true) {
     const subtitle = topicReportView.querySelector('#topicReportSubtitle');
     const statusBadge = topicReportView.querySelector('#topicStatusBadge');
     const scoreDisplay = topicReportView.querySelector('#topicScoreDisplay');
-    
+
     header.textContent = `${topic.name} - Complete!`;
     subtitle.textContent = `Assessment finished with ${progress.correct}/${progress.total} correct answers`;
-    
+
     // Update status badge and score display based on performance
     const score = Math.round((progress.correct / progress.total) * 100);
     scoreDisplay.textContent = `${score}%`;
-    
+
     if (score >= 80) {
         statusBadge.textContent = 'Excellent';
         statusBadge.className = 'status-badge excellent';
@@ -1174,7 +1186,7 @@ function showTopicReport(showAnswers = true) {
 
     const content = topicReportView.querySelector('#topicReportContent');
     const incorrect = progress.total - progress.correct;
-    
+
     content.innerHTML = `
         <div class="topic-report-metrics">
             <div class="metric-card correct">
@@ -1536,7 +1548,7 @@ function showOverallResults() {
     }
 
     // PDF download button
-     if (downloadBtn) {
+    if (downloadBtn) {
         downloadBtn.onclick = async () => {
             await downloadOverallResultsPdf({ labels, scores });
         };
@@ -1747,7 +1759,7 @@ async function downloadOverallResultsPdf() {
 
     downloadBtn.disabled = false;
     btnText.textContent = 'Download PDF';
-    
+
     // Show success popup
     showDownloadSuccessPopup();
 
@@ -1845,20 +1857,20 @@ function showDownloadSuccessPopup() {
     if (popup) {
         popup.style.display = 'flex';
         document.body.style.overflow = 'hidden'; // Prevent background scrolling
-        
+
         // Add event listener for close button
         const closeBtn = document.getElementById('closePopupBtn');
         if (closeBtn) {
             closeBtn.onclick = hideDownloadSuccessPopup;
         }
-        
+
         // Add event listener for overlay click to close
         popup.onclick = (e) => {
             if (e.target === popup) {
                 hideDownloadSuccessPopup();
             }
         };
-        
+
         // Add escape key listener
         document.addEventListener('keydown', handleEscapeKey);
     }
