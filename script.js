@@ -62,7 +62,7 @@ function buildTopicSelectionGrid() {
     if (!currentModuleData || !currentModuleData.topics) return;
 
     topicSelectionGrid.innerHTML = '';
-    const completedTopics = JSON.parse(localStorage.getItem('completedTopics') || '[]');
+    const completedTopics = JSON.parse(localStorage.getItem('completedTopicsSecondAssessment') || '[]');
 
     currentModuleData.topics.forEach((topic, index) => {
         const totalQuestions = (topic.mcqs?.length || 0) + (topic.codeTasks?.length || 0);
@@ -106,7 +106,7 @@ document.getElementById('backBtn').onclick = () => {
     // Toggle top-level overall results button if all topics completed
     const showOverallTop = document.getElementById('showOverallResultsBtnTop');
     if (showOverallTop) {
-        const completedTopics = JSON.parse(localStorage.getItem('completedTopics') || '[]');
+        const completedTopics = JSON.parse(localStorage.getItem('completedTopicsSecondAssessment') || '[]');
         if (completedTopics.length && currentModuleData.topics && completedTopics.length === currentModuleData.topics.length) {
             showOverallTop.style.display = '';
             showOverallTop.onclick = () => {
@@ -1148,10 +1148,10 @@ function proceedFinishTopic() {
 }
 
 function markTopicCompleted(topicName) {
-    const completedTopics = JSON.parse(localStorage.getItem('completedTopics') || '[]');
+    const completedTopics = JSON.parse(localStorage.getItem('completedTopicsSecondAssessment') || '[]');
     if (!completedTopics.includes(topicName)) {
         completedTopics.push(topicName);
-        localStorage.setItem('completedTopics', JSON.stringify(completedTopics));
+        localStorage.setItem('completedTopicsSecondAssessment', JSON.stringify(completedTopics));
     }
 }
 
@@ -1346,7 +1346,7 @@ function generateTopicQuestionResults(showAnswers = true) {
 
 // Disable completed topics
 function disableCompletedTopics() {
-    const completedTopics = JSON.parse(localStorage.getItem('completedTopics') || '[]');
+    const completedTopics = JSON.parse(localStorage.getItem('completedTopicsSecondAssessment') || '[]');
     currentModuleData.topics.forEach((topic, index) => {
         const isCompleted = completedTopics.includes(topic.name);
         if (isCompleted) {
