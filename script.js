@@ -916,8 +916,9 @@ function checkTopicCompletion() {
 
 function checkAllTopicsCompleted() {
     if (!currentModuleData || !currentModuleData.topics) return false;
+   
 
-    return currentModuleData.topics.every(topic => {
+    currentModuleData.topics.every(topic => {
         const progress = topicProgress.get(topic.name);
         return progress.completed === progress.total;
     });
@@ -1064,16 +1065,21 @@ function finishTopicAssessment() {
         popup.style.display = 'flex';
         const answeredStatus = document.getElementById('answeredStatus')
         const myCurrentTopic = currentModuleData.topics[currentTopicIndex].name;
-        var temp = new Map(JSON.parse(localStorage.getItem('answeredMap') || '{}'))
-        const filteredPairs = new Map();
+        var answered = 0;
+        if (localStorage.getItem('answeredMap')) {
+            var temp = new Map(JSON.parse(localStorage.getItem('answeredMap') || '{}'))
+            const filteredPairs = new Map();
 
-        for (const [key, value] of temp.entries()) {
-            if (value.topic === myCurrentTopic) {
-                filteredPairs.set(key, value);
+            for (const [key, value] of temp.entries()) {
+                if (value.topic === myCurrentTopic) {
+                    filteredPairs.set(key, value);
+                }
             }
+            answered = filteredPairs.size
+
         }
 
-        answeredStatus.innerHTML = `You answered <b style="color: #007BFF;">${filteredPairs.size}</b> out of <b style="color: #007BFF;">${linearItems.length}</b> questions.`;
+        answeredStatus.innerHTML = `You answered <b style="color: #007BFF;">${answered}</b> out of <b style="color: #007BFF;">${linearItems.length}</b> questions.`;
         document.body.style.overflow = 'hidden';
 
         const cancelBtn = document.getElementById('cancelFinishBtn');
@@ -1227,6 +1233,7 @@ function showTopicReport(showAnswers = true) {
     const overallBtn = topicReportView.querySelector('#showOverallResultsBtn');
     if (overallBtn) {
         if (checkAllTopicsCompleted()) {
+            
             overallBtn.style.display = '';
             overallBtn.onclick = () => {
                 topicReportView.style.display = 'none';
